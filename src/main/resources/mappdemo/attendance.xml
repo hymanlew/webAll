@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tbl_employee" >
+
+
+
+<!--bob，历史考勤导出，所有员工列表（有4个工地，每个工地都有）14-->
+<select>
+
+    (
+    SELECT
+    T1.*, 0 AS leaving
+    FROM
+    zh_employee T1
+    LEFT JOIN (
+    SELECT
+    *
+    FROM
+    zh_attendance
+    WHERE
+    date_time > '2018-03-28'
+    AND site_id = 2
+    ORDER BY
+    date_time DESC
+    ) ar ON T1.id = ar.employee_id
+    WHERE
+    T1.site_id = 2
+    AND T1.id IN (
+    SELECT
+    id
+    FROM
+    zh_employee
+    WHERE
+    site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =1
+    AND construction_id =3
+    )
+    )
+    GROUP BY
+    T1.id
+    ORDER BY
+    T1.blame DESC,
+    ar.date_time DESC
+    )
+    UNION
+    (
+    SELECT DISTINCT
+    T3.*, 1 AS leaving
+    FROM
+    zh_employee T3
+    JOIN (
+    SELECT
+    *
+    FROM
+    zh_site_record
+    WHERE
+    site_id =2
+    AND leaving IS NOT NULL
+    AND employee_id NOT IN (
+    SELECT
+    employee_id
+    FROM
+    zh_site_record
+    WHERE
+    site_id =2
+    AND leaving IS NULL
+    )
+    ) T4 ON T3.id = T4.employee_id
+    WHERE T3.site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =1
+    AND construction_id =3
+    )
+    )
+</select>
+
+
+<!--bob，异常考勤，所有员工数量-->
+<select>
+    SELECT
+    count(*)
+    FROM
+    (
+    (
+    SELECT
+    T1.id
+    FROM
+    zh_employee T1
+    LEFT JOIN (
+    SELECT
+    *
+    FROM
+    zh_attendance
+    WHERE
+    date_time > '2018-03-28'
+    ORDER BY
+    date_time DESC
+    ) ar ON T1.id = ar.employee_id
+    WHERE
+    T1.id IN (
+    SELECT
+    id
+    FROM
+    zh_employee
+    WHERE
+    site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =0
+    AND construction_id =3
+    )
+    )
+    GROUP BY
+    T1.id
+    ORDER BY
+    T1.blame DESC,
+    ar.date_time DESC
+    )
+    UNION
+    (
+    SELECT DISTINCT
+    T3.id
+    FROM
+    zh_employee T3
+    JOIN (
+    SELECT
+    *
+    FROM
+    zh_site_record
+    WHERE
+    leaving IS NOT NULL
+    AND site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =0
+    AND construction_id =3
+    )
+    AND employee_id NOT IN (
+    SELECT
+    employee_id
+    FROM
+    zh_site_record
+    WHERE
+    leaving IS NULL
+    AND site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =0
+    AND construction_id =3
+    )
+    )
+    ) T4 ON T3.id = T4.employee_id
+    WHERE
+    T3.site_id IN (
+    SELECT
+    id
+    FROM
+    zh_site
+    WHERE
+    state =0
+    AND construction_id =3
+    )
+    )
+    ) total
+ </select>
+
+
+<!--bob，正常考勤，所有员工数量-->
+<select>
+SELECT
+	count(*)
+FROM
+	(
+		(
+			SELECT
+				T1.id
+			FROM
+				zh_employee T1
+			LEFT JOIN (
+				SELECT
+					*
+				FROM
+					zh_attendance
+				WHERE
+					date_time > '2018-03-30'
+				ORDER BY
+					date_time DESC
+			) ar ON T1.id = ar.employee_id
+			WHERE
+				T1.id IN (
+					SELECT
+						id
+					FROM
+						zh_employee
+					WHERE
+						site_id IN (
+							SELECT
+								id
+							FROM
+								zh_site
+							WHERE
+state=1 AND
+								construction_id =3
+						)
+				)
+			GROUP BY
+				T1.id
+			ORDER BY
+				T1.blame DESC,
+				ar.date_time DESC
+		)
+		UNION
+			(
+				SELECT DISTINCT
+					T3.id
+				FROM
+					zh_employee T3
+				JOIN (
+					SELECT
+						*
+					FROM
+						zh_site_record
+					WHERE
+						leaving IS NOT NULL
+					AND site_id IN (
+						SELECT
+							id
+						FROM
+							zh_site
+						WHERE
+state=1 AND
+							construction_id =3
+					)
+					AND employee_id NOT IN (
+						SELECT
+							employee_id
+						FROM
+							zh_site_record
+						WHERE
+							leaving IS NULL
+						AND site_id IN (
+							SELECT
+								id
+							FROM
+								zh_site
+							WHERE
+state=1 AND
+								construction_id =3
+						)
+					)
+				) T4 ON T3.id = T4.employee_id
+			)
+	) total
+
+</select>
+
+
+<!--bob，异常考勤，所有员工列表-->
+<select>
+    (
+	SELECT
+		T1.*, 0 AS leaving
+	FROM
+		zh_employee T1
+JOIN (
+		SELECT
+			*
+		FROM
+			zh_attendance
+		WHERE
+			date_time > '2018-03-28'
+		ORDER BY
+			date_time DESC
+	) ar ON T1.id = ar.employee_id
+	WHERE
+		T1.id IN (
+			SELECT
+				employee_id
+			FROM
+				zh_site_record
+			WHERE
+				leaving IS NULL
+			AND site_id IN (
+				SELECT
+					id
+				FROM
+					zh_site
+				WHERE
+					state = 0
+				AND construction_id = 22
+			)
+		)
+	GROUP BY
+		T1.id
+	ORDER BY
+		T1.blame DESC,
+		ar.date_time DESC
+)
+UNION
+	(
+		SELECT DISTINCT
+			T3.*, 1 AS leaving
+		FROM
+			zh_employee T3
+		JOIN (
+			SELECT
+				*
+			FROM
+				zh_site_record
+			WHERE
+				leaving IS NOT NULL
+			AND site_id IN (
+				SELECT
+					id
+				FROM
+					zh_site
+				WHERE
+					state = 0
+				AND construction_id = 22
+			)
+
+		) T4 ON T3.id = T4.employee_id
+		WHERE
+			T3.site_id IN (
+				SELECT
+					id
+				FROM
+					zh_site
+				WHERE
+					state = 0
+				AND construction_id = 22
+			)
+	)
+</select>
+
+
+ <!--bob，正常考勤，所有员工列表-->
+<select>
+    (
+		SELECT DISTINCT
+			T1.*, 0 AS leaving
+		FROM
+			zh_employee T1
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				zh_attendance
+			WHERE
+				date_time > '2018-03-30'
+			ORDER BY
+				date_time DESC
+		) ar ON T1.id = ar.employee_id
+		WHERE
+			T1.id IN (
+				SELECT
+					id
+				FROM
+					zh_employee
+				WHERE
+					site_id IN (
+						SELECT
+							id
+						FROM
+							zh_site
+						WHERE
+							state =0
+						AND construction_id =3
+					)
+			)
+		GROUP BY
+			T1.id
+		ORDER BY
+			T1.blame DESC,
+			ar.date_time DESC
+	)
+UNION
+	(
+		SELECT DISTINCT
+			T3.*, 1 AS leaving
+		FROM
+			zh_employee T3
+		JOIN (
+			SELECT
+				*
+			FROM
+				zh_site_record
+			WHERE
+				leaving IS NOT NULL
+			AND site_id IN (
+				SELECT
+					id
+				FROM
+					zh_site
+				WHERE
+					state =0
+				AND construction_id =3
+			)
+			AND employee_id NOT IN (
+				SELECT
+					employee_id
+				FROM
+					zh_site_record
+				WHERE
+					leaving IS NULL
+				AND site_id IN (
+					SELECT
+						id
+					FROM
+						zh_site
+					WHERE
+						state =0
+					AND construction_id =3
+				)
+			)
+		) T4 ON T3.id = T4.employee_id
+	)
+
+</select>
+
+<!--jack1，正常考勤，所有员工列表-->
+<select>
+	(
+	SELECT DISTINCT
+		T1.*, 0 AS leaving
+	FROM
+		zh_employee T1
+	LEFT JOIN (
+		SELECT
+			*
+		FROM
+			zh_attendance
+		WHERE
+			date_time > '2018-04-12'
+		ORDER BY
+			date_time DESC
+	) ar ON T1.id = ar.employee_id
+	WHERE
+		T1.id IN (
+			SELECT
+				id
+			FROM
+				zh_employee
+			WHERE
+				site_id IN (
+					SELECT
+						id
+					FROM
+						zh_site
+					WHERE
+						state =0
+				)
+		)
+	GROUP BY
+		T1.id
+	ORDER BY
+		T1.blame DESC,
+		ar.date_time DESC
+)
+</select>
+
+<!--jack1，正常考勤，所有员工打卡时间-->
+<select>
+	SELECT
+	T1.*
+	FROM
+	zh_attendance T1,
+	zh_employee T2
+	WHERE
+	T1.employee_id = T2.id
+	AND T1.date >= '2018-04-20'
+	AND T1.date <= '2018-04-27'
+	AND T1.employee_id IN (1, 2, 3, 4, 5, 6, 7, 8)
+	ORDER BY
+	date_time DESC
+</select>
+
+<!--jack1，正常考勤，所有员工数量-->
+<select>
+	SELECT
+	count(*)
+FROM
+	(
+		(
+			SELECT
+				T1.id
+			FROM
+				zh_employee T1
+			LEFT JOIN (
+				SELECT
+					*
+				FROM
+					zh_attendance
+				WHERE
+					date_time > '2018-04-12'
+				ORDER BY
+					date_time DESC
+			) ar ON T1.id = ar.employee_id
+			WHERE
+				T1.id IN (
+					SELECT
+						id
+					FROM
+						zh_employee
+					WHERE
+						site_id IN (
+							SELECT
+								id
+							FROM
+								zh_site
+							WHERE
+								state =0
+						)
+				)
+			GROUP BY
+				T1.id
+			ORDER BY
+				T1.blame DESC,
+				ar.date_time DESC
+		)
+	) total
+</select>
+
+	<!--jack1，导出正常考勤，所有员工列表-->
+<select>
+	(
+	SELECT DISTINCT
+		T1.*, 0 AS leaving
+	FROM
+		zh_employee T1
+	LEFT JOIN (
+		SELECT
+			*
+		FROM
+			zh_attendance
+		WHERE
+			date_time > '2018-04-12'
+		ORDER BY
+			date_time DESC
+	) ar ON T1.id = ar.employee_id
+	WHERE
+		T1.id IN (
+			SELECT
+				id
+			FROM
+				zh_employee
+			WHERE
+				site_id IN (SELECT id FROM zh_site)
+		)
+	GROUP BY
+		T1.id
+	ORDER BY
+		T1.blame DESC,
+		ar.date_time DESC
+)
+</select>
+
+	<!--jack1，导出正常考勤，所有员工打卡时间-->
+<select>
+	SELECT
+	T1.*
+	FROM
+	zh_attendance T1,
+	zh_employee T2
+	WHERE
+	T1.employee_id = T2.id
+	AND T1.date >= '2018-04-19'
+	AND T1.date <= '2018-04-26'
+	AND T1.employee_id =26
+	ORDER BY
+	date_time DESC
+</select>
+
+	<!--jack1，个人正常考勤，员工打卡时间-->
+<select>
+	SELECT
+	T1.*
+	FROM
+	zh_attendance T1,
+	zh_employee T2
+	WHERE
+	T1.employee_id = T2.id
+	AND T1.site_id = 2
+	AND T1.date >= '2018-04-01'
+	AND T1.date <= '2018-04-26'
+	AND T1.employee_id =1
+	ORDER BY
+	date_time DESC
+</select>
+
+	<!--jack1，导出个人正常考勤，员工打卡时间-->
+<select>
+	SELECT
+	T1.*
+	FROM
+	zh_attendance T1,
+	zh_employee T2
+	WHERE
+	T1.employee_id = T2.id
+	AND T1.site_id = 2
+	AND T1.date >= '2018-04-01'
+	AND T1.date <= '2018-04-26'
+	AND T1.employee_id =1
+	ORDER BY
+	date_time DESC
+</select>
+
+<select id="xm">
+    (
+	SELECT DISTINCT
+		T1.*, 0 AS leaving
+	FROM
+		zh_employee T1
+	LEFT JOIN (
+		SELECT
+			*
+		FROM
+			zh_attendance
+		WHERE
+			date_time > '2018-04-03'
+		AND site_id = 35
+		ORDER BY
+			date_time DESC
+	) ar ON T1.id = ar.employee_id
+	WHERE
+		T1.site_id = 35
+	AND T1.type = 11
+	AND T1. NAME LIKE '%王克元%'
+	AND T1.id IN (
+		SELECT
+			id
+		FROM
+			zh_employee
+		WHERE
+			site_id IN (
+				SELECT
+					id
+				FROM
+					zh_site
+				WHERE
+					state =0
+				AND construction_id =6
+			)
+	)
+	GROUP BY
+		T1.id
+	ORDER BY
+		T1.blame DESC,
+		ar.date_time DESC
+)
+UNION
+	(
+		SELECT DISTINCT
+			T3.*, 1 AS leaving
+		FROM
+			zh_employee T3
+		JOIN (
+			SELECT
+				*
+			FROM
+				zh_site_record
+			WHERE
+				site_id =35
+			AND leaving IS NOT NULL
+			AND employee_id IN (
+				SELECT
+					id
+				FROM
+					zh_employee
+				WHERE
+					NAME LIKE '%王克元%'
+				AND type = 11
+			)
+			AND employee_id NOT IN (
+				SELECT
+					employee_id
+				FROM
+					zh_site_record
+				WHERE
+					site_id =35
+				AND leaving IS NULL
+			)
+		) T4 ON T3.id = T4.employee_id
+	)
+</select>
+
+<!--数据异常 sql，待解决-->
+<select>
+
+    SELECT DISTINCT
+        T3.*, 1 AS leaving
+    FROM
+        zh_employee T3
+    JOIN (
+        SELECT
+            *
+        FROM
+            zh_site_record
+        WHERE
+            leaving IS NOT NULL
+        AND site_id IN (
+            SELECT
+                id
+            FROM
+                zh_site
+            WHERE
+                state =1
+            AND construction_id =3
+        )
+    ) T4 ON T3.id = T4.employee_id
+    WHERE
+        T3.site_id IN (
+            SELECT
+                id
+            FROM
+                zh_site
+            WHERE
+                state = 1
+            AND construction_id = 3
+        )
+
+</select>
+
+<!--数据异常 sql，待解决-->
+<select>
+
+    SELECT DISTINCT
+        T3.*, 1 AS leaving
+    FROM
+        zh_employee T3
+    JOIN (
+        SELECT
+            *
+        FROM
+            zh_site_record
+        WHERE
+            site_id =2
+        AND leaving IS NOT NULL
+
+    ) T4 ON T3.id = T4.employee_id
+    WHERE
+        T3.site_id IN (
+            SELECT
+                id
+            FROM
+                zh_site
+            WHERE
+                state = 1
+            AND construction_id = 3
+        )
+
+
+</select>
+</mapper>

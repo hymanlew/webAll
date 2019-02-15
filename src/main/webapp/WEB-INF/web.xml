@@ -1,0 +1,143 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+
+    <display-name>hyman web</display-name>
+    <!-- value 里面只能写除了当前 xml文件的其他文件,否则会死得很难看 -->
+    <!--<context-param>-->
+        <!--<param-name>contextConfigLocation</param-name>-->
+        <!--<param-value>classpath:spring/*.xml,/WEB-INF/spring-security.xml</param-value>-->
+    <!--</context-param>-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/*.xml</param-value>
+    </context-param>
+
+
+    <!--
+          ContextLoaderListener 其作用是在启动Web容器时，自动装配Spring applicationContext.xml的配置信息（即所有 context-param内声明的配置文件）。
+          因为它实现了 ServletContextListener 这个接口，在启动容器时就会默认执行它实现的方法。在ContextLoaderListener中关联了ContextLoader这个类，
+          所以整个加载配置过程由ContextLoader来完成。
+        -->
+    <listener>
+        <description>spring监听器</description>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- DispatcherServlet前端控制器 -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+      Spring Security是一个能够为基于Spring的企业应用系统提供声明式的安全访问控制解决方案的安全框架。
+         是一种基于 Spring AOP 和 Servlet 过滤器的安全框架，同时在 Web 请求级和方法调用级处理身份确认和授权（auth）。
+
+      Spring　security主要是从两个方面解决安全性问题：
+          web请求级别：  使用servlet过滤器保护web请求并限制URL级别的访问
+          方法调用级别：  使用Spring AOP保护方法调用，确保具有适当权限的用户采用访问安全保护的方法．
+
+      DelegatingFilterProxy：动态授权拦截器
+      springSecurityFilterChain，这个名字是固定的，在DelegatingFilterProxy类init时，会获取filter-name，然后通过 filter-name 去
+      spring中获取代理的bean。
+
+      而此类的作用主要是为了让Spring MVC可插拔性，也就是说你的security框架可以不用Spring的，可以用其它任何一家的security框架。
+      它对应的就是 spring 的 ContextLoaderListener，然后与 contextConfigLocation 的 xml配置文件，实现 IOC,DI 注入，共同作用于
+      -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 启用连接池 Web 监控统计功能 -->
+    <filter>
+        <filter-name>DruidStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <!-- 设置不被监控的类型，内容 -->
+            <param-name>exclusions</param-name>
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!--
+     1、此监听器主要用于解决 java.beans.Introspector导致的内存泄漏的问题（单词意思为：自我反思，反省）
+     2、此监听器应该配置在web.xml中与Spring相关监听器中的第一个位置(也要在ContextLoaderListener的前面)
+
+     3、JDK中的 java.beans.Introspector 类的用途是发现Java类是否符合 JavaBean规范，如果有的框架或程序用到了 Introspector类,那么就会启用
+       一个系统级别的缓存,此缓存会存放一些曾加载并分析过的JavaBean的引用。当Web服务器关闭时,由于此缓存中存放着这些JavaBean的引用,所以垃圾回收器
+       无法回收Web容器中的JavaBean对象,最后导致内存变大。
+
+       而 org.springframework.web.util.IntrospectorCleanupListener就是专门用来处理Introspector内存泄漏问题的辅助类。它会在 Web服务器停
+       止时清理Introspector缓存,使那些Javabean能被垃圾回收器正确回收。Spring自身不会出现这种问题，因为Spring在加载并分析完一个类之后会马上刷新
+       JavaBeans Introspector缓存,这就保证Spring中不会出现这种内存泄漏的问题。但有些程序和框架在使用了JavaBeans Introspector之后,没有进行清
+       理工作(如 Quartz,Struts),最后导致内存泄漏。
+
+       此监听器在本项目中必须放在最后边配置，否则会使各 xml配置文件冲突。（待解决）
+   -->
+    <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404</location>
+    </error-page>
+
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
