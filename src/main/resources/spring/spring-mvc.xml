@@ -24,6 +24,7 @@
     default-filters="true" 时，添加include和exclude只是对里面的注解进行二次筛选。
 
     一般来讲，事务处理的配置和mvc的配置不在一起，他们各自扫描注解起作用。可能就会出现覆盖问题，从而出现事务不起作用。
+    只需在业务层中添加@Transaction方法即可使用事务，并判断是否生效。
     -->
     <context:component-scan base-package="com.hyman" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
