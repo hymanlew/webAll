@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+    <!-- 扫描 bean 到 bean 工厂 -->
+    <!--<context:component-scan base-package="com.hyman"/>-->
+
+    <!--
+    use-default-filters="false 表示不使用默认的扫描机制，即不自动扫描，只扫描 include bean，且排除 exclude bean。
+    但要注意这样的话，则没有 include 的 bean，在系统中就不能自动注入，因为它本就没有放入到 bean 工厂中。
+
+    但是这样做的原因，只是在加载里避免与 mybatis 中的 AOP service 扫描起冲突。并且为了正常使用 spring 的 bean，也必须要在
+    其它 xml 文件中再设置为 true（默认的）。例如 mybaits 中的 context 配置。
+
+    default-filters="true" 时，添加include和exclude只是对里面的注解进行二次筛选。
+
+    一般来讲，事务处理的配置和mvc的配置不在一起，他们各自扫描注解起作用。可能就会出现覆盖问题，从而出现事务不起作用。
+    只需在业务层中添加@Transaction方法即可使用事务，并判断是否生效。
+    -->
+    <context:component-scan base-package="com.hyman" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+    </context:component-scan>
+
+    <!-- 导入 spring-mvc 相关注解驱动-->
+    <mvc:annotation-driven/>
+
+    <!--
+      因为默认的 DispatcherServlet前端控制器请求映射配置为"/"，则Spring MVC将捕获Web容器所有的请求，包括静态资源的请求，Spring MVC会
+      将它们当成一个普通请求处理，因此找不到对应处理器将导致错误。
+      解决方案就是以下两种方式:
+
+      1,配置<mvc:default-servlet-handler />后，会在Spring MVC上下文中定义一个org.springframework.web.servlet.resource.
+        DefaultServletHttpRequestHandler，它会像一个检查员对进入DispatcherServlet的URL进行筛查，如果发现是静态资源的请求，就将该请求
+        转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，才由DispatcherServlet继续处理。
+
+        一般Web应用服务器默认的Servlet名称是"default"，因此DefaultServletHttpRequestHandler可以找到它。如果你所有的Web应用服务器的默
+        认Servlet名称不是"default"，则需要通过default-servlet-name属性显示指定：
+
+       <mvc:default-servlet-handler default-servlet-name="所使用的Web服务器默认使用的Servlet名称" />
+
+      2.采用<mvc:resources />
+
+        <mvc:default-servlet-handler />将静态资源的处理经由Spring MVC框架交回Web应用服务器处理。而<mvc:resources />更进一步，由
+        Spring MVC框架自己处理静态资源，并添加一些有用的附加值功能。
+
+        首先，<mvc:resources />允许静态资源放在任何地方，如WEB-INF目录下、类路径下等，你甚至可以将JavaScript等静态文件打到JAR包中。通
+        过location属性指定静态资源的位置，由于location属性是Resources类型，因此可以使用诸如"classpath:"等的资源前缀指定资源位置。传统
+        Web容器的静态资源只能放在Web容器的根路径下，<mvc:resources />完全打破了这个限制。
+
+        其次，<mvc:resources />依据当前著名的Page Speed、YSlow等浏览器优化原则对静态资源提供优化。你可以通过cacheSeconds属性指定静态
+        资源在浏览器端的缓存时间，一般可将该时间设置为一年，以充分利用浏览器端的缓存。在输出静态资源时，会根据配置设置好响应报文头的Expires
+        和 Cache-Control值。
+
+        在接收到静态资源的获取请求时，会检查请求头的Last-Modified值，如果静态资源没有发生变化，则直接返回303相应状态码，提示客户端使用浏览
+        器缓存的数据，而非将静态资源的内容输出到客户端，以充分节省带宽，提高程序性能。
+
+        在springMVC-servlet中添加如下配置：
+
+        <mvc:resources location="/,classpath:/META-INF/publicResources/" mapping="/resources/**"/>
+
+        以上配置将Web根路径"/"及类路径下 /META-INF/publicResources/ 的目录映射为/resources路径。假设Web根路径下拥有images、js这两
+        个资源目录,在images下面有bg.gif图片，在js下面有test.js文件，则可以通过 /resources/images/bg.gif 和 /resources/js/test.js
+        访问这二个静态资源。
+
+        假设WebRoot还拥有images/bg1.gif 及 js/test1.js，则也可以在网页中通过 /resources/images/bg1.gif 及 /resources/js/test1.js
+        进行引用。
+
+    -->
+    <mvc:default-servlet-handler/>
+    <mvc:resources location="/js/" mapping="/js/**" />
+    <mvc:resources location="/css/" mapping="/css/*" />
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsppage/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- Json 转换器，将数据自动转换为 json格式来响应，将POJO对象自动转换为JSON对象。设置 json的数据类型 -->
+    <bean id="JsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="JsonConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Multipart：多部件的， Resolver：分析器-->
+    <!-- 200*1024*1024 即 200M，resolveLazily属性启用是为了推迟文件解析，以便捕获文件大小异常 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="8388608" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="resolveLazily" value="true" />
+    </bean>
+</beans>

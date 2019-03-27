@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 此配置文件只适用于 security 4.2.1 版本及以下 -->
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+    <!-- 静态资源，不使用权限  security="none"表示没有安全设置 -->
+    <http pattern="/*/*_allow" security="none"/>
+    <http pattern="/token/*" security="none"/>
+    <http pattern="/login.jsp" security="none"/>
+
+
+    <!--   use-expressions 是否使用表达式方式来写权限，选择 true -->
+    <http auto-config="false" use-expressions="true">
+
+        <!--
+            你可以选择忽略ROLE_ 前缀. 我们这样做是为了消除重复. 具体地，由于hasRole表达式已将值定义为一个角色，如果它不存在会自动添加
+            前缀。hasRole('ROLE_USER') 和 hasRole('USER') 的配置效果一样
+        -->
+        <intercept-url pattern="/WEB-INF" access="hasRole('ROLE_USER')" />
+        <!--<intercept-url pattern="/**" access="ROLE_USER" />-->
+
+        <!--
+            username-parameter：表示登录时用户名使用的是哪个参数，默认是 “j_username”。
+            password-parameter：表示登录时密码使用的是哪个参数，默认是 “j_password”。
+
+            login-processing-url：必须要配置，否则安全框架就不会拦截，而是全部通过了。表示登录时提交的地址，默认是 “/j-spring-security
+                        -check”。这个只是 Spring Security 用来标记登录页面使用的提交地址，真正关于登录这个请求是 target-url 处理的。
+
+            default-target-url：是必须要配置的，否则请求路径为空。并且也可以与 login-processing-url 一致，而且无论怎么配置只会运行
+                        target-url。
+            use-default-target：必须是为 true的，否则登录时会一会有路径显示网页，一会无路径报 404
+
+            1. login-page 自定义登录页url,默认为/login
+            2. login-processing-url 登录请求拦截的url,也就是form表单提交时指定的action
+            3. default-target-url 默认登录成功后跳转的url
+            4. always-use-default-target 是否总是使用默认的登录成功后跳转url
+            5. authentication-failure-url 登录失败后跳转的url
+            6. username-parameter 用户名的请求字段 默认为userName
+            7. password-parameter 密码的请求字段 默认为password
+            8. authentication-success-handler-ref 指向一个AuthenticationSuccessHandler用于处理认证成功的请求,不能和default-target-url还有always-use-default-target同时使用
+            9. authentication-success-forward-url 用于authentication-failure-handler-ref
+            10. authentication-failure-handler-ref 指向一个AuthenticationFailureHandler用于处理失败的认证请求
+            11. authentication-failure-forward-url 用于authentication-failure-handler-ref
+            12. authentication-details-source-ref 指向一个AuthenticationDetailsSource,在认证过滤器中使用
+
+            并且使用框架后，要特别注意， 要特别注意，security默认登录和退出时只对 get请求方法有效，并且还必须要使用 post方式请求，它也
+            会自动转为 get。 否则它不会进行拦截。
+        -->
+
+        <form-login login-page="/login.jsp"
+                    login-processing-url="/com/hyman/security/login"
+                    always-use-default-target="true"
+                    default-target-url="/com/hyman/security/welcome"
+                    authentication-failure-url="/com/hyman/security/login?error=error"  />
+
+
+        <!-- 如果没有配置 form-login，则 Spring Security 还支持弹窗进行认证 -->
+        <!--<http-basic />-->
+
+        <!-- logout-success-url 默认是只退出到登录页面 -->
+        <!--<logout logout-url="/security/logout" logout-success-url="/logout.jsp"
+                    invalidate-session="true" delete-cookies="JSESSIONID" />-->
+
+
+        <!-- 如果需要自定义退出页面，可以自定义一个系统的继承类，或者不使用框架直接使用controller -->
+        <!--<logout logout-url="/security/logout" success-handler-ref="myUrlLogoutSuccessHandler" />-->
+
+        <!--springSecurity4的新特性，防止csrf攻击，此处关闭-->
+        <csrf disabled="true"/>
+
+        <!--springSecurity4的新特性，防止frame内嵌攻击，默认deny，现设置为SAMEORIGIN-->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+
+        <!-- 同一时间内允许同一账号保持4个在线，error-if-maximum-exceeded="true"表示第第四个以后的登不进去 -->
+        <session-management>
+            <concurrency-control max-sessions="4"
+                                 error-if-maximum-exceeded="true" />
+        </session-management>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service properties="classpath:config/users.properties"></user-service>
+
+            <!--<user-service>-->
+            <!--<user name="user" password="user" authorities="ROLE_USER" />-->
+            <!--<user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN" />-->
+            <!--</user-service>-->
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

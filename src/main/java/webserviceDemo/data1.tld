@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body>
+        <GetEnterprisesResponse xmlns="http://218.4.84.171:5445/">
+            <GetEnterprisesResult>
+                <DataTable>
+                    <Enterprises>
+                        <Enterprise>
+                            <Qymc>南京市第六建筑安装工程有限公司</Qymc>
+                            <Qyzzjgdm>913201181358443070</Qyzzjgdm>
+                            <PrjNumber>3205072017050902A01000</PrjNumber>
+                            <Cjlx>总承包</Cjlx>
+                            <Qylxr>张康华</Qylxr>
+                            <Qylxdh>15962128275</Qylxdh>
+                        </Enterprise>
+                    </Enterprises>
+                </DataTable>
+            </GetEnterprisesResult>
+        </GetEnterprisesResponse>
+    </soap:Body>
+</soap:Envelope>

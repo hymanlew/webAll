@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+    <!-- 静态资源，不使用权限  security="none"表示没有安全设置 -->
+    <http pattern="/*/*_allow" security="none"/>
+    <http pattern="/token/*" security="none"/>
+    <http pattern="/*.jsp" security="none"/>
+    <http pattern="/*.ico" security="none"/>
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/login.jsp" security="none"/>
+    <http pattern="/403.jsp" security="none"/>
+
+    <!--security 只是我们使用命名空间的一个前缀。http 元素是用于定义 Web 相关权限控制的。
+   如果 <http> 元素设置 auto-config="true"，可以自动生成一个自动登陆页面，但不会这样使用。-->
+    <http auto-config="false" entry-point-ref="authEntryPoint" use-expressions="true">
+
+        <!--springSecurity4的新特性，防止csrf攻击，此处关闭-->
+        <csrf disabled="true"/>
+
+        <!--springSecurity4的新特性，防止frame内嵌攻击，默认deny，现设置为SAMEORIGIN-->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+
+        <!-- 自定义的登录缓存 -->
+        <request-cache ref="httpSessionRequestCache" />
+
+        <!--<intercept-url pattern="/" access="hasRole('USER')" />-->
+        <!--<intercept-url pattern="/**" access="hasAnyRole('USER','ADMIN')" />-->
+        <intercept-url pattern="/**" access="hasRole('USER')" />
+        <!--<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />-->
+
+        <form-login login-page="/login.jsp"
+                    login-processing-url="/j_spring_security_check"
+                    default-target-url=""
+                    authentication-failure-url="/security/login?error=error" />
+
+        <logout logout-url="/j_spring_security_logout" logout-success-url="/login.jsp" />
+
+        <!--
+            key="remenber" 是固定的名字，对应页面中的 _spring_security_remember_me，
+            token-validity-seconds 表示 cookie的有效期（秒为单位），
+            remember-me-parameter对应登录页上checkbox的名字
+        -->
+        <remember-me key="remember" token-validity-seconds="2419200" />
+
+        <!-- 检测失效的sessionId，超时时定位到另外一个URL，即首页，登录人员数量即 session 不设限制。exceed：超过。 -->
+        <session-management invalid-session-url="/login.jsp">
+            <concurrency-control max-sessions="1"
+                                 error-if-maximum-exceeded="false" />
+        </session-management>
+
+        <!-- 当用户权限不够时，跳转到的页面 -->
+        <access-denied-handler error-page="/403.jsp" />
+
+        <!-- 以下是人为设定 security框架拦截器默认的执行顺序 -->
+        <custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="myFilterSecurityInterceptor" />
+        <!-- 自定义 filter拦截器（验证码拦截器，），并运行在系统拦截器（登录验证拦截器，页面权限拦截器）之前 -->
+        <custom-filter before="FORM_LOGIN_FILTER" ref="validateCodeAuthenticationFilter" />
+    </http>
+
+
+    <!--
+        之前介绍的都是基于URL的权限控制，Spring Security同样支持对于方法的权限控制。可以通过 intercept-methods对某个bean下面的方法
+        进行权限控制，也可以通过 pointcut对整个 Service层的方法进行统一的权限控制，还可以通过注解定义对单独的某一个方法进行权限控制。
+
+        <bean id="userService" class="com.xxx.service.impl.UserServiceImpl">
+          <security:intercept-methods>
+             <security:protect access="ROLE_USER" method="find*"/>
+             <security:protect access="ROLE_ADMIN" method="add*"/>
+          </security:intercept-methods>
+        </bean>
+
+       <security:global-method-security>
+          <security:protect-pointcut access="ROLE_READ" expression="execution(* com.elim.*..*Service.find*(..))"/>
+          <security:protect-pointcut access="ROLE_WRITE" expression="execution(* com.elim.*..*Service.*(..))"/>
+       </security:global-method-security>
+
+        基于注解的方法权限控制也是需要通过 global-method-security元素定义来进行启用的。Spring Security在方法的权限控制上支持三种类
+        型的注解，JSR-250注解、@Secured注解和支持表达式的注解。
+        这三种注解默认都是没有启用的，需要单独通过global-method-security元素的对应属性进行启用。
+    -->
+    <!--
+        开启方法级别的保护(使用SPEL表达式的高级保护)
+        Spring Security中定义了四个支持使用表达式的注解，分别是@PreAuthorize、@PostAuthorize、@PreFilter和@PostFilter。其中前两
+        者可以用来在方法调用前或者调用后进行权限检查，后两者可以用来对集合类型的参数或者返回值进行过滤。要使它们的定义能够对我们的方法的调用
+        产生影响我们需要设置 global-method-security元素的 pre-post-annotations=”enabled”，默认为disabled。
+        在本项目中，主要是使用 security的标签库来进行拦截，代码写在 jsp页面中。
+    -->
+    <global-method-security pre-post-annotations="enabled"></global-method-security>
+
+    <!-- 设置自动链接结点页面-->
+    <beans:bean id="authEntryPoint" class="com.hyman.security.AutoLoadIndex" scope="singleton">
+        <beans:constructor-arg name="loginFormUrl" value="/login.jsp"/>
+    </beans:bean>
+
+    <!-- 自定义的登录缓存,判断在跳转登录页是不是ajax请求，如果是则不缓存，避免ajax跳转登陆后，只返回ajax结果，不返回页面 -->
+    <beans:bean id="httpSessionRequestCache" class="com.hyman.security.HttpSessionRequestCache">
+        <!-- ajax提交的登录后页面的参数名-->
+        <beans:property name="paramName" value="toUrl" />
+    </beans:bean>
+
+    <!--访问决策器（授权器），决定某个用户具有的角色，是否有足够的权限去访问某个资源。即拿到用户所拥有的权限，与权限配置一一进行比较，来判断是否能够访问 -->
+    <beans:bean id="accessDecisionManager" class="com.hyman.security.MyAccessDecisionManager"></beans:bean>
+
+    <!--
+        路径资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色访问。
+        该类获取路径资源（与数据库中指定的路径即安全对象进行匹配，并且）与权限间的对应关系，并返回访问路径索取要的权限
+    -->
+    <beans:bean id="securityMetadataSource" class="com.hyman.security.MyInvocationSecurityMetadataSource"
+                init-method="loadResourceDefine">
+        <beans:constructor-arg><beans:ref bean="sqlSessionTemplate" /></beans:constructor-arg>
+    </beans:bean>
+
+    <!-- ================================= 相关配置所需要的组件声明与设置 ============================================= -->
+
+    <!-- 会话注册表 -->
+    <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl"></beans:bean>
+
+    <!-- Strategy：策略， 在线 session控制策略 ,实现控制异地登录数 -->
+    <beans:bean id="sessionStrategy"
+                class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
+        <!-- session 注册 -->
+        <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="maximumSessions" value="2" />
+        <!-- 设为 false时超过最大 session数量也不报登录异常 -->
+        <beans:property name="exceptionIfMaximumExceeded" value="false" />
+    </beans:bean>
+
+    <!-- 默认登录成功后（有该用户时），跳转到的页面 -->
+    <beans:bean id="loginLogAuthenticationSuccessHandler"
+                class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/security/welcome" />
+    </beans:bean>
+
+    <!--
+        我们都知道url的hash部分是不能传到服务器端的，例如 http://projectname/#M_FACTORY:ci，其中url里面的 “#M_FACTORY:ci” 是hash
+        部分，在前台可以用 location.hash取得，在传到后台的时候这部分是被忽略掉的。如果我们想实现登录后自动跳转到这个 url，普通的重定向是
+        没法实现的。
+
+        这时就需要配置 redirectStrategy参数和重定向策略，之后当前的请求才会对含有这个参数名的URL进行检查，然后将其对应的值作为转向的目标url
+
+        并且配置 Spring登录成功的重定向策略时，不能使用always-use-default-target="true"，不然无法重定向
+    -->
+    <beans:bean id="myAuthenticationFailureHandler" class="com.hyman.security.MyAuthenticationFailureHandler">
+        <!--
+            在这里不能直接写静态页面路径，因为一旦登录失败，虽然网页是指定的静态页面，但是浏览器显示的路径却是 security 框架默认的 login地址。
+            如此在进入页面后再回退就是出异常，因为回退到的地址只是 login，而非静态页面路径。
+            所以这里必须写 controller 路径，并且如果要指向登录页面则必须是重定向的，否则还是使用框架默认的路径。
+        -->
+        <beans:property name="defaultFailureUrl" value="/security/login?error=error" />
+    </beans:bean>
+
+    <!-- 该类从数据库中获取登录用户的密码，角色信息，权限等信息 -->
+    <beans:bean id="userDetailService" class="com.hyman.security.MyUserDetailService"></beans:bean>
+
+    <beans:bean id="rememberMeAuthenticationProvider"
+                class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+        <beans:constructor-arg name="key" value="remember" />
+    </beans:bean>
+
+    <beans:bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+        <beans:constructor-arg name="key" value="remember" />
+        <beans:constructor-arg name="userDetailsService" ref="userDetailService" />
+        <!-- 是否一直缓存用户密码信息 -->
+        <beans:property name="alwaysRemember" value="false" />
+        <beans:property name="tokenValiditySeconds" value="432000" />
+        <!-- 指定对应的参数名称 -->
+        <beans:property name="parameter" value="_spring_security_remember_me" />
+    </beans:bean>
+
+    <!-- ================================= 综合所有必须的组件，统一调用及配置 ============================================= -->
+
+    <!-- 权限验证管理器，实现用户认证的入口，主要实现UserDetailsService接口即可，它可以有许多 provider（提供者）来提供用户验证信息 -->
+    <authentication-manager id="authenticationManager">
+        <authentication-provider user-service-ref="userDetailService">
+            <!-- 给密码设置加密编码 -->
+            <!--<password-encoder hash="md5" />-->
+        </authentication-provider>
+        <authentication-provider ref="rememberMeAuthenticationProvider" />
+    </authentication-manager>
+
+    <!-- 自定义验证码登录验证过滤器，然后内部统一调用处理相关验证业务功能组件 -->
+    <beans:bean id="validateCodeAuthenticationFilter" class="com.hyman.security.ValidateCodeAuthenticationFilter">
+        <beans:property name="postOnly" value="true"></beans:property>
+        <!-- 此配置可实现获取所有登录用户信息，session 验证策略 -->
+        <beans:property name="sessionAuthenticationStrategy" ref="sessionStrategy" />
+        <!-- 验证成功或失败要执行的操作 -->
+        <beans:property name="authenticationSuccessHandler" ref="loginLogAuthenticationSuccessHandler" />
+        <beans:property name="authenticationFailureHandler" ref="myAuthenticationFailureHandler" />
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+        <beans:property name="rememberMeServices" ref="rememberMeServices" />
+
+        <!-- 声明并指定 sqlSessionFactory对象的构造方法 -->
+        <beans:constructor-arg><beans:ref bean="sqlSessionFactory"/></beans:constructor-arg>
+    </beans:bean>
+
+    <!--
+        一个自定义的 filter，必须包含 authenticationManager, accessDecisionManager, securityMetadataSource三个属性，
+        我们所有的控制都将在这三个类中实现，解释详见具体配置
+    -->
+    <beans:bean id="myFilterSecurityInterceptor" class="com.hyman.security.MyFilterSecurityInterceptor">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+        <beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+        <beans:property name="securityMetadataSource" ref="securityMetadataSource" />
+    </beans:bean>
+</beans:beans>

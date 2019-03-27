@@ -1,0 +1,1824 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tbl_employee" >
+  <resultMap id="BaseResultMap" type="com.weijin.building.entity.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="health" property="health" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="urgency" property="urgency" jdbcType="VARCHAR" />
+    <result column="urgency_phone" property="urgencyPhone" jdbcType="VARCHAR" />
+    <result column="blame" property="blame" jdbcType="INTEGER" />
+    <result column="party" property="party" jdbcType="INTEGER" />
+    <result column="compare" property="compare" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" javaType="INTEGER"/>
+    <association property="site" javaType="com.weijin.building.entity.Site"
+                 column="site_id" select="tbl_site.selectByPrimaryKey"></association>
+    <association property="area" javaType="com.weijin.building.entity.Area"
+                 column="area_id" select="tbl_area.selectByPrimaryKey"></association>
+    <association property="company" javaType="com.weijin.building.entity.Company"
+                 column="company_id" select="tbl_company.selectByPrimaryKey"></association>
+    <association property="typeEntity" javaType="com.weijin.building.entity.Type"
+                 column="type" select="tbl_type.selectByPro"></association>
+    <association property="group" javaType="com.weijin.building.entity.Group"
+                 column="group_id" select="tbl_group.selectByPrimaryKey"></association>
+  </resultMap>
+
+  <resultMap id="identityResultMap" type="com.weijin.building.entity.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="health" property="health" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="urgency" property="urgency" jdbcType="VARCHAR" />
+    <result column="urgency_phone" property="urgencyPhone" jdbcType="VARCHAR" />
+    <result column="blame" property="blame" jdbcType="INTEGER" />
+    <result column="party" property="party" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" javaType="INTEGER"/>
+  </resultMap>
+
+  <resultMap id="faceResultMap" type="com.weijin.building.entity.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="identity" property="identity" jdbcType="VARCHAR"/>
+    <result column="face" property="face" jdbcType="LONGVARCHAR"/>
+    <result column="feature" property="feature" jdbcType="LONGVARCHAR"/>
+  </resultMap>
+
+  <resultMap id="compareResultMap" type="com.weijin.building.entity.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="identity" property="identity" jdbcType="VARCHAR"/>
+    <result column="compare" property="compare" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <resultMap id="singleResultMap" type="com.weijin.building.entity.Employee">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="health" property="health" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="urgency" property="urgency" jdbcType="VARCHAR" />
+    <result column="urgency_phone" property="urgencyPhone" jdbcType="VARCHAR" />
+    <result column="blame" property="blame" jdbcType="INTEGER" />
+    <result column="party" property="party" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" javaType="INTEGER"/>
+    <association property="typeEntity" javaType="com.weijin.building.entity.Type"
+                 column="type" select="tbl_type.selectByPro"></association>
+  </resultMap>
+
+  <resultMap id="attendanceResultMap" type="com.weijin.building.entity.Employee">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="health" property="health" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="urgency" property="urgency" jdbcType="VARCHAR" />
+    <result column="urgency_phone" property="urgencyPhone" jdbcType="VARCHAR" />
+    <result column="blame" property="blame" jdbcType="INTEGER" />
+    <result column="party" property="party" jdbcType="INTEGER" />
+    <result column="leaving" property="leaving" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" javaType="INTEGER"/>
+    <association property="typeEntity" javaType="com.weijin.building.entity.Type"
+                 column="type" select="tbl_type.selectByPro"></association>
+    <association property="group" javaType="com.weijin.building.entity.Group"
+                 column="group_id" select="tbl_group.selectByPrimaryKey"></association>
+    <collection property="siteRecords" column="id" ofType="com.weijin.building.entity.SiteRecord" select="tbl_siterecord.getEmployeeRecord"></collection>
+
+  </resultMap>
+  <!-- 职工工种分布统计的resultMap -->
+  <resultMap id="WorkerTypeResultMap"
+             type="com.weijin.building.response.WorkTypeStatistic">
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- 职工籍贯分布统计的resultMap -->
+  <resultMap id="HomeTownResultMap"
+             type="com.weijin.building.response.HomeTownStatistic">
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="val" property="val" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="uploadResultMap" type="com.weijin.building.entity.Employee">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, photo, sex, birthday, area_id, phone, identity,start_date,end_date, address,health, type, site_id,
+    company_id,group_id, urgency, urgency_phone, blame,party,compare, time, bank_card
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.weijin.building.entity.Employee" useGeneratedKeys="true" keyProperty="id" >
+    insert into zh_employee (id, name, photo, 
+      sex, birthday, area_id, 
+      phone, identity, start_date,end_date,address,health,
+      type, site_id, company_id, group_id,
+      urgency, urgency_phone, blame, party,
+      time, bank_card)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{areaId,jdbcType=INTEGER}, 
+      #{phone,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR},#{endDate,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR}, #{health,jdbcType=INTEGER},
+      #{type,jdbcType=INTEGER}, #{siteId,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER},
+      #{urgency,jdbcType=VARCHAR}, #{urgencyPhone,jdbcType=VARCHAR}, #{blame,jdbcType=INTEGER},
+       #{party,jdbcType=INTEGER},#{time,jdbcType=TIMESTAMP}, #{bankCard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.weijin.building.entity.Employee" useGeneratedKeys="true" keyProperty="id" >
+    insert into zh_employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="photo != null" >
+        photo,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="identity != null" >
+        identity,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="health != null" >
+        health,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="siteId != null" >
+        site_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="urgency != null" >
+        urgency,
+      </if>
+      <if test="urgencyPhone != null" >
+        urgency_phone,
+      </if>
+      <if test="blame != null" >
+        blame,
+      </if>
+      <if test="party != null" >
+        party,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="bankCard != null" >
+        bank_card,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="health != null" >
+        #{health,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="urgency != null" >
+        #{urgency,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyPhone != null" >
+        #{urgencyPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="blame != null" >
+        #{blame,jdbcType=INTEGER},
+      </if>
+      <if test="party != null" >
+        #{party,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankCard != null" >
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.weijin.building.entity.Employee" >
+    update zh_employee
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        identity = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="health != null" >
+        health = #{health,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        site_id = #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="urgency != null" >
+        urgency = #{urgency,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyPhone != null" >
+        urgency_phone = #{urgencyPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="blame != null" >
+        blame = #{blame,jdbcType=INTEGER},
+      </if>
+      <if test="party != null" >
+        party = #{party,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankCard != null" >
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.weijin.building.entity.Employee" >
+    update zh_employee
+    set name = #{name,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      area_id = #{areaId,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=VARCHAR},
+      end_date = #{endDate,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      health = #{health,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      site_id = #{siteId,jdbcType=INTEGER},
+      company_id = #{companyId,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      urgency = #{urgency,jdbcType=VARCHAR},
+      urgency_phone = #{urgencyPhone,jdbcType=VARCHAR},
+      blame = #{blame,jdbcType=INTEGER},
+      party = #{party,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP},
+      bank_card = #{bankCard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- =======================================================分割线======================================================= -->
+  <!-- 查询员工总人数 -->
+  <select id="getCount" resultType="Integer"
+          parameterType="com.weijin.building.request.PropSet">
+    select
+    count(*)
+    from(SELECT site_id,id,company_id FROM zh_employee)e join (SELECT id,construction_id,area_id FROM zh_site) s on e.site_id= s.id
+    <where>
+      <if test="obj1!=null">
+        e.company_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        and e.site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and s.construction_id=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        and s.area_id=#{obj4}
+      </if>
+    </where>
+  </select>
+  <!-- 查询不诚信员工总人数 -->
+  <select id="getDishonstCount" resultType="Integer"
+          parameterType="com.weijin.building.request.PropSet">
+    select
+    count(*)
+    from(SELECT site_id,id,blame FROM zh_employee)e join (SELECT id,construction_id,area_id FROM zh_site) s on e.site_id= s.id
+    where e.blame>0
+    <if test="obj1!=null">
+      and e.company_id=#{obj1}
+    </if>
+    <if test="obj2!=null">
+      and e.site_id=#{obj2}
+    </if>
+    <if test="obj3!=null">
+      and s.construction_id=#{obj3}
+    </if>
+    <if test="obj4!=null">
+      and s.area_id=#{obj4}
+    </if>
+
+  </select>
+  <select id="statisticWorkerType" resultMap="WorkerTypeResultMap"
+          parameterType="com.weijin.building.request.PropSet">
+    select e.type,t.name,count(*) count from zh_employee e join zh_site s
+    on s.id=e.site_id join zh_type t on e.type=t.pro
+    <where>
+      <if test="obj1!=null">
+        e.company_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        and e.site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and s.construction_id=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        and s.area_id=#{obj4}
+      </if>
+    </where>
+    group by e.type
+  </select>
+  <select id="statisticWorkerTypeAttendance" resultMap="WorkerTypeResultMap"
+          parameterType="com.weijin.building.request.PropSet">
+    SELECT T2.type,T3.name, count(*) count from
+    (SELECT * from zh_attendance where date='${obj5}'
+    and employee_id in (select e.id from zh_employee e JOIN zh_site s on s.id=e.site_id
+    <where>
+      <if test="obj1!=null">
+        e.company_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        and e.site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and s.construction_id=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        and s.area_id=#{obj4}
+      </if>
+    </where>
+    ) GROUP BY employee_id)T1
+    JOIN zh_employee T2 on T1.employee_id=T2.id
+    join zh_type T3 on T2.type=T3.pro
+    GROUP BY T2.type
+  </select>
+  <!-- 根据籍贯分 -->
+  <select id="statisticHomeTown" resultMap="HomeTownResultMap"
+          parameterType="com.weijin.building.request.PropSet">
+    select a.district region,count(*) val from zh_employee e join zh_area a on
+    a.id=e.area_id join zh_site s on e.site_id=s.id
+    <where>
+      <if test="obj1!=null">
+        e.company_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        and e.site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and s.construction_id=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        and s.area_id=#{obj4}
+      </if>
+    </where>
+    GROUP BY a.id
+  </select>
+  <select id="findEmployee" parameterType="com.weijin.building.request.PropSet" resultMap="BaseResultMap">
+    select * from (
+    SELECT
+    T1.*
+    FROM zh_employee T1,zh_company T2 WHERE T1.company_id=T2.id
+    <if test="obj1!=null">
+      AND T2.area_id=#{obj1}
+    </if>
+    <if test="obj2!=null">
+      AND T1.site_id = #{obj2}
+    </if>
+    <if test="obj3!=null">
+      AND T2.id = #{obj3}
+    </if>
+    <if test="obj4!=null">
+      AND T1.type = #{obj4}
+    </if>
+    <if test="obj5!=null">
+      AND (T1.name LIKE '%${obj5}%'  OR T1.identity LIKE '%${obj5}%')
+    </if>
+    <if test="obj6!=null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT id FROM zh_site WHERE construction_id=#{obj6}))
+    </if>
+    order by T1.blame desc)t
+    <if test="obj7!=null and obj8!=null">
+      limit #{obj7},#{obj8}
+    </if>
+  </select>
+
+  <select id="findEmployeeSingle" parameterType="com.weijin.building.request.PropSet" resultMap="singleResultMap">
+    select * from (
+    SELECT
+    T1.*
+    FROM zh_employee T1,zh_company T2 WHERE T1.company_id=T2.id
+    <if test="obj1!=null">
+      AND T2.area_id=#{obj1}
+    </if>
+    <if test="obj2!=null">
+      AND T1.site_id = #{obj2}
+    </if>
+    <if test="obj3!=null">
+      AND T2.id = #{obj3}
+    </if>
+    <if test="obj4!=null">
+      AND T1.type = #{obj4}
+    </if>
+    <if test="obj5!=null">
+      AND (T1.name LIKE '%${obj5}%'  OR T1.identity LIKE '%${obj5}%')
+    </if>
+    <if test="obj6!=null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT id FROM zh_site WHERE construction_id=#{obj6}))
+    </if>
+    order by T1.blame desc)t
+    <if test="obj7!=null and obj8!=null">
+      limit #{obj7},#{obj8}
+    </if>
+  </select>
+
+  <select id="findEmployeeAttendence" parameterType="com.weijin.building.request.PropSet" resultMap="attendanceResultMap">
+    (SELECT
+    T1.*,0 as leaving
+    FROM zh_employee T1
+    join (SELECT * from zh_attendance
+    where date_time > '${obj9}'
+    <if test="obj2!=null">
+      AND site_id = #{obj2}
+    </if>
+    ORDER BY date_time desc) ar on T1.id=ar.employee_id
+    <where>
+    <if test="obj1!=null">
+      AND T2.area_id=#{obj1}
+    </if>
+    <if test="obj2!=null">
+      AND T1.site_id = #{obj2}
+    </if>
+    <if test="obj16!=null">
+      AND T1.site_id in (select id from zh_site where area_id in (${obj16}))
+    </if>
+    <if test="obj3!=null">
+      AND T1.company_id = #{obj3}
+    </if>
+    <if test="obj4!=null">
+      AND T1.type = #{obj4}
+    </if>
+    <if test="obj5!=null">
+      AND T1.name LIKE '%${obj5}%'
+    </if>
+    <if test="obj15!=null">
+      AND T1.group_id =#{obj15}
+    </if>
+    <if test="obj10!=null">
+      AND  T1.identity = '${obj10}'
+    </if>
+
+    <if test="obj6==null and obj11==null">
+      AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site
+      <where>
+        <if test="obj17!=null">
+          state =#{obj17}
+        </if>
+        <if test="obj6!=null">
+         AND construction_id=#{obj6}
+        </if>
+        <if test="obj12!=null">
+          and address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+
+    <if test="obj6!=null and obj11==null">
+        AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site
+      <where>
+        <if test="obj17!=null">
+          state =#{obj17}
+        </if>
+        <if test="obj6!=null">
+         AND construction_id=#{obj6}
+        </if>
+        <if test="obj12!=null">
+          and address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+    <if test="obj6==null and obj11!=null">
+        AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site site join zh_construction con
+      on site.construction_id=con.id
+      <where>
+        <if test="obj11!=null">
+          and con.NAME  like '%${obj11}%'
+        </if>
+        <if test="obj12!=null">
+          and site.address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  site.build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site.site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+    <if test="obj6!=null and obj11!=null">
+        AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site site join zh_construction con
+      on site.construction_id=con.id
+      <where>
+        <if test="obj6!=null">
+          and cons.id=#{obj6}
+        </if>
+        <if test="obj11!=null">
+          and con.NAME  like '%${obj11}%'
+        </if>
+        <if test="obj12!=null">
+          and site.address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  site.build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site.site_category_id =#{obj14}
+        </if>
+      </where>
+      ))
+    </if>
+    </where>
+    GROUP BY T1.id order by T1.blame desc, ar.date_time desc)
+
+    <if test="obj15==null">
+      <!-- 需要union已经离职的员工-->
+      <!-- obj2 siteId-->
+      <!-- obj3 companyId-->
+      <!-- obj6 constructionId-->
+      <!-- obj11 constructionName-->
+      <!-- obj12 address -->
+      <!-- obj13 build-->
+      <!-- obj14 category-->
+      <if test="obj2!=null or obj3!=null or obj6==null or obj11==null or obj12!=null or obj13!=null or obj14!=null ">
+        union (
+        select DISTINCT T3.*,1 as leaving from zh_employee T3
+        <!-- join zh_site_record 表 开始-->
+        join
+        <if test="obj2!=null">
+          (select * from zh_site_record where leaving is not null
+          <if test="obj5!=null or obj4!=null or obj10!=null">
+            and employee_id in (select id from zh_employee
+            <where>
+              <if test="obj5!=null">
+                and name like '%${obj5}%'
+              </if>
+              <if test="obj4!=null">
+                and type= #{obj4}
+              </if>
+              <if test="obj10!=null">
+                and identity like '%${obj10}%'
+              </if>
+            </where>)
+          </if>
+          and employee_id not in (select employee_id from zh_site_record where site_id=#{obj2} and leaving is null)
+          )
+        </if>
+        <if test="obj2==null">
+          (select * from zh_site_record
+          <!-- 其他条件-->
+          where leaving is not null
+            <if test="obj5!=null or obj4!=null or obj10!=null">
+              and employee_id in (select id from zh_employee
+              <where>
+                <if test="obj5!=null">
+                  and name like '%${obj5}%'
+                </if>
+                <if test="obj4!=null">
+                  and type= #{obj4}
+                </if>
+                <if test="obj10!=null">
+                  and identity like '%${obj10}%'
+                </if>
+              </where>)
+            </if>
+          <if test="obj6==null and obj11==null">
+              and employee_id not in (select employee_id from zh_site_record
+              where leaving is null
+              <if test="obj2==null">AND site_id=#{obj2}
+              </if>)
+            <!--and site_id IN(SELECT id FROM zh_site-->
+            <!--<where>-->
+              <!--<if test="obj17!=null">-->
+                <!--state =#{obj17}-->
+              <!--</if>-->
+              <!--<if test="obj6!=null">-->
+               <!--AND construction_id=#{obj6}-->
+              <!--</if>-->
+              <!--<if test="obj16!=null">-->
+                <!--and area_id in (${obj16})-->
+              <!--</if>-->
+              <!--<if test="obj12!=null">-->
+                <!--and address like '%${obj12}%'-->
+              <!--</if>-->
+              <!--<if test="obj13!=null">-->
+                <!--and  build like '%${obj13}%'-->
+              <!--</if>-->
+              <!--<if test="obj14!=null">-->
+                <!--and  site_category_id =#{obj14}-->
+              <!--</if>-->
+            <!--</where>)-->
+          </if>
+
+          <!--<if test="obj6!=null and obj11==null">-->
+            <!--and site_id IN(SELECT id FROM zh_site-->
+            <!--<where>-->
+              <!--<if test="obj17!=null">-->
+                <!--state =#{obj17}-->
+              <!--</if>-->
+              <!--<if test="obj6!=null">-->
+               <!--AND construction_id=#{obj6}-->
+              <!--</if>-->
+              <!--<if test="obj16!=null">-->
+                <!--and area_id in (${obj16})-->
+              <!--</if>-->
+              <!--<if test="obj12!=null">-->
+                <!--and address like '%${obj12}%'-->
+              <!--</if>-->
+              <!--<if test="obj13!=null">-->
+                <!--and  build like '%${obj13}%'-->
+              <!--</if>-->
+              <!--<if test="obj14!=null">-->
+                <!--and  site_category_id =#{obj14}-->
+              <!--</if>-->
+            <!--</where>)-->
+          <!--</if>-->
+
+
+          <if test="obj6==null and obj11!=null">
+            and site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+            on site.construction_id=cc.id
+            <where>
+              <if test="obj11!=null">
+                and cc.NAME  like '%${obj11}%'
+              </if>
+              <if test="obj16!=null">
+                and site.area_id in (${obj16})
+              </if>
+              <if test="obj12!=null">
+                and site.address like '%${obj12}%'
+              </if>
+              <if test="obj13!=null">
+                and  site.build like '%${obj13}%'
+              </if>
+              <if test="obj14!=null">
+                and  site.site_category_id =#{obj14}
+              </if>
+            </where>)
+          </if>
+
+
+          <if test="obj6!=null and obj11!=null">
+            and site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+            on site.construction_id=cc.id
+            <where>
+              <if test="obj6!=null">
+                and cc.id=#{obj6}
+              </if>
+              <if test="obj16!=null">
+                and site.area_id in (${obj16})
+              </if>
+              <if test="obj11!=null">
+                and cc.NAME  like '%${obj11}%'
+              </if>
+              <if test="obj11!=null">
+                and site.address like '%${obj12}%'
+              </if>
+              <if test="obj13!=null">
+                and  site.build like '%${obj13}%'
+              </if>
+              <if test="obj14!=null">
+                and  site.site_category_id =#{obj14}
+              </if>
+            </where>)
+          </if>
+
+          <!--and employee_id  not in (-->
+          <!--select employee_id from zh_site_record where leaving is NULL-->
+          <!--<if test="obj6==null and obj11==null">-->
+            <!--and site_id IN(SELECT id FROM zh_site-->
+            <!--<where>-->
+              <!--<if test="obj17!=null">-->
+                <!--state =#{obj17}-->
+              <!--</if>-->
+              <!--<if test="obj6!=null">-->
+               <!--AND construction_id=#{obj6}-->
+              <!--</if>-->
+              <!--<if test="obj16!=null">-->
+                <!--and area_id in (${obj16})-->
+              <!--</if>-->
+              <!--<if test="obj12!=null">-->
+                <!--and address like '%${obj12}%'-->
+              <!--</if>-->
+              <!--<if test="obj13!=null">-->
+                <!--and  build like '%${obj13}%'-->
+              <!--</if>-->
+              <!--<if test="obj14!=null">-->
+                <!--and  site_category_id =#{obj14}-->
+              <!--</if>-->
+            <!--</where>)-->
+          <!--</if>-->
+          <if test="obj6==null and obj11!=null">
+            and site_id IN(SELECT site.id FROM zh_site site join zh_construction ccc
+            on site.construction_id=ccc.id
+            <where>
+              <if test="obj11!=null">
+                and ccc.NAME  like '%${obj11}%'
+              </if>
+              <if test="obj16!=null">
+                and site.area_id in (${obj16})
+              </if>
+              <if test="obj12!=null">
+                and site.address like '%${obj12}%'
+              </if>
+              <if test="obj13!=null">
+                and  site.build like '%${obj13}%'
+              </if>
+              <if test="obj14!=null">
+                and  site.site_category_id =#{obj14}
+              </if>
+            </where>)
+          </if>
+          <if test="obj6!=null and obj11!=null">
+            and site_id IN(SELECT site.id FROM zh_site site join zh_construction ccc
+            on site.construction_id=ccc.id
+            <where>
+              <if test="obj6!=null">
+                and ccc.id=#{obj6}
+              </if>
+              <if test="obj16!=null">
+                and site.area_id in (${obj16})
+              </if>
+              <if test="obj11!=null">
+                and ccc.NAME  like '%${obj11}%'
+              </if>
+              <if test="obj11!=null">
+                and site.address like '%${obj12}%'
+              </if>
+              <if test="obj13!=null">
+                and  site.build like '%${obj13}%'
+              </if>
+              <if test="obj14!=null">
+                and  site.site_category_id =#{obj14}
+              </if>
+            </where>
+          </if>
+
+          )
+        </if> T4
+        on T3.id=T4.employee_id
+        <if test="obj17!=null">
+          WHERE
+          T3.site_id IN (
+          SELECT
+          id
+          FROM
+          zh_site
+          WHERE
+          state = #{obj17}
+          <if test="obj6!=null">
+            AND construction_id = #{obj6}
+          </if>
+          )
+        </if>
+          )
+      </if>
+    </if>
+
+    <if test="obj7!=null and obj8!=null">
+      limit #{obj7},#{obj8}
+    </if>
+  </select>
+  <select id="getByIdentity" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * from zh_employee where identity=#{identity,jdbcType=VARCHAR}
+  </select>
+  <select id="findEmployeeCount" parameterType="com.weijin.building.request.PropSet" resultType="int">
+    select count(*) from ((SELECT
+    T1.id
+    FROM zh_employee T1 join zh_company T2 on T2.id=T1.company_id
+    left join (SELECT * from zh_attendance where date_time > '${obj9}' ORDER BY date_time desc) ar on T1.id=ar.employee_id
+    WHERE T1.company_id=T2.id
+    <if test="obj1!=null">
+      AND T2.area_id=#{obj1}
+    </if>
+    <if test="obj2!=null">
+      AND T1.site_id = #{obj2}
+    </if>
+    <if test="obj16!=null">
+      AND T1.site_id = in (select id from zh_site where area_id in (${obj16}))
+    </if>
+    <if test="obj3!=null">
+      AND T2.id = #{obj3}
+    </if>
+    <if test="obj4!=null">
+      AND T1.type = #{obj4}
+    </if>
+    <if test="obj5!=null">
+      AND T1.name LIKE '%${obj5}%'
+    </if>
+    <if test="obj10!=null">
+      AND  T1.identity = '${obj10}'
+    </if>
+
+    <if test="obj6==null and obj11==null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT id FROM zh_site
+      <where>
+        <if test="obj6!=null">
+          construction_id=#{obj6}
+        </if>
+        <if test="obj12!=null">
+          and address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+
+    <if test="obj6!=null and obj11==null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT id FROM zh_site
+      <where>
+        <if test="obj6!=null">
+          construction_id=#{obj6}
+        </if>
+        <if test="obj12!=null">
+          and address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+    <if test="obj6==null and obj11!=null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT site.id FROM zh_site site join zh_construction con
+      on site.construction_id=con.id
+      <where>
+        <if test="obj11!=null">
+          and con.NAME  like '%${obj11}%'
+        </if>
+        <if test="obj12!=null">
+          and site.address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  site.build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site.site_category_id =#{obj14}
+        </if>
+      </where>))
+    </if>
+    <if test="obj6!=null and obj11!=null">
+      AND T1.id IN(SELECT id FROM zh_employee WHERE site_id IN(SELECT site.id FROM zh_site site join zh_construction con
+      on site.construction_id=con.id
+      <where>
+        <if test="obj6!=null">
+          and cons.id=#{obj6}
+        </if>
+        <if test="obj11!=null">
+          and con.NAME  like '%${obj11}%'
+        </if>
+        <if test="obj11!=null">
+          and site.address like '%${obj12}%'
+        </if>
+        <if test="obj13!=null">
+          and  site.build like '%${obj13}%'
+        </if>
+        <if test="obj14!=null">
+          and  site.site_category_id =#{obj14}
+        </if>
+      </where>
+      ))
+    </if>
+
+    GROUP BY T1.id order by T1.blame desc, ar.date_time desc)
+
+    <!-- 需要union已经离职的员工-->
+    <!-- obj2 siteId-->
+    <!-- obj3 companyId-->
+    <!-- obj6 constructionId-->
+    <!-- obj11 constructionName-->
+    <!-- obj12 address -->
+    <!-- obj13 build-->
+    <!-- obj14 category-->
+    <if test="obj2!=null or obj3!=null or obj6!=null or obj11!=null or obj12!=null or obj13!=null or obj14!=null ">
+      union (
+      select T3.id from zh_employee T3
+      <!-- join zh_site_record 表 开始-->
+      join
+      <if test="obj2!=null">
+        (select * from zh_site_record where site_id=#{obj2})
+      </if>
+      <if test="obj2==null">
+        (select * from zh_site_record
+        <!-- 其他条件-->
+        <if test="obj6==null and obj11==null">
+          WHERE site_id IN(SELECT id FROM zh_site
+          <where>
+            <if test="obj6!=null">
+              construction_id=#{obj6}
+            </if>
+            <if test="obj16!=null">
+              and area_id in (${obj16})
+            </if>
+            <if test="obj12!=null">
+              and address like '%${obj12}%'
+            </if>
+            <if test="obj13!=null">
+              and  build like '%${obj13}%'
+            </if>
+            <if test="obj14!=null">
+              and  site_category_id =#{obj14}
+            </if>
+          </where>)
+        </if>
+
+        <if test="obj6!=null and obj11==null">
+          WHERE site_id IN(SELECT id FROM zh_site
+          <where>
+            <if test="obj6!=null">
+              construction_id=#{obj6}
+            </if>
+            <if test="obj16!=null">
+              and area_id in (${obj16})
+            </if>
+            <if test="obj12!=null">
+              and address like '%${obj12}%'
+            </if>
+            <if test="obj13!=null">
+              and  build like '%${obj13}%'
+            </if>
+            <if test="obj14!=null">
+              and  site_category_id =#{obj14}
+            </if>
+          </where>)
+        </if>
+
+
+        <if test="obj6==null and obj11!=null">
+          WHERE site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+          on site.construction_id=cc.id
+          <where>
+            <if test="obj11!=null">
+              and cc.NAME  like '%${obj11}%'
+            </if>
+            <if test="obj16!=null">
+              and site.area_id in (${obj16})
+            </if>
+            <if test="obj12!=null">
+              and site.address like '%${obj12}%'
+            </if>
+            <if test="obj13!=null">
+              and  site.build like '%${obj13}%'
+            </if>
+            <if test="obj14!=null">
+              and  site.site_category_id =#{obj14}
+            </if>
+          </where>)
+        </if>
+
+
+        <if test="obj6!=null and obj11!=null">
+          WHERE site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+          on site.construction_id=cc.id
+          <where>
+            <if test="obj6!=null">
+              and cc.id=#{obj6}
+            </if>
+            <if test="obj16!=null">
+              and site.area_id in (${obj16})
+            </if>
+            <if test="obj11!=null">
+              and cc.NAME  like '%${obj11}%'
+            </if>
+            <if test="obj11!=null">
+              and site.address like '%${obj12}%'
+            </if>
+            <if test="obj13!=null">
+              and  site.build like '%${obj13}%'
+            </if>
+            <if test="obj14!=null">
+              and  site.site_category_id =#{obj14}
+            </if>
+          </where>)
+        </if>
+        )
+      </if> T4
+      on T3.id=T4.employee_id
+
+      ))TT
+    </if>
+  </select>
+  <select id="findEmployeeCountAttendance" parameterType="com.weijin.building.request.PropSet" resultType="int">
+    select count(*) from (
+
+      (SELECT
+      T1.*,0 as leaving
+      FROM zh_employee T1
+      join (SELECT * from zh_attendance
+      where date_time > '${obj9}'
+      <if test="obj2!=null">
+          AND site_id = #{obj2}
+      </if>
+      ORDER BY date_time desc) ar on T1.id=ar.employee_id
+      <where>
+          <if test="obj1!=null">
+              AND T2.area_id=#{obj1}
+          </if>
+          <if test="obj2!=null">
+              AND T1.site_id = #{obj2}
+          </if>
+          <if test="obj16!=null">
+              AND T1.site_id in (select id from zh_site where area_id in (${obj16}))
+          </if>
+          <if test="obj3!=null">
+              AND T1.company_id = #{obj3}
+          </if>
+          <if test="obj4!=null">
+              AND T1.type = #{obj4}
+          </if>
+          <if test="obj5!=null">
+              AND T1.name LIKE '%${obj5}%'
+          </if>
+          <if test="obj15!=null">
+              AND T1.group_id =#{obj15}
+          </if>
+          <if test="obj10!=null">
+              AND  T1.identity = '${obj10}'
+          </if>
+
+          <if test="obj6==null and obj11==null">
+              AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site
+              <where>
+                  <if test="obj17!=null">
+                      state =#{obj17}
+                  </if>
+                  <if test="obj6!=null">
+                      AND construction_id=#{obj6}
+                  </if>
+                  <if test="obj12!=null">
+                      and address like '%${obj12}%'
+                  </if>
+                  <if test="obj13!=null">
+                      and  build like '%${obj13}%'
+                  </if>
+                  <if test="obj14!=null">
+                      and  site_category_id =#{obj14}
+                  </if>
+              </where>))
+          </if>
+
+          <if test="obj6!=null and obj11==null">
+              AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site
+              <where>
+                  <if test="obj17!=null">
+                      state =#{obj17}
+                  </if>
+                  <if test="obj6!=null">
+                      AND construction_id=#{obj6}
+                  </if>
+                  <if test="obj12!=null">
+                      and address like '%${obj12}%'
+                  </if>
+                  <if test="obj13!=null">
+                      and  build like '%${obj13}%'
+                  </if>
+                  <if test="obj14!=null">
+                      and  site_category_id =#{obj14}
+                  </if>
+              </where>))
+          </if>
+          <if test="obj6==null and obj11!=null">
+              AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site site join zh_construction con
+              on site.construction_id=con.id
+              <where>
+                  <if test="obj11!=null">
+                      and con.NAME  like '%${obj11}%'
+                  </if>
+                  <if test="obj12!=null">
+                      and site.address like '%${obj12}%'
+                  </if>
+                  <if test="obj13!=null">
+                      and  site.build like '%${obj13}%'
+                  </if>
+                  <if test="obj14!=null">
+                      and  site.site_category_id =#{obj14}
+                  </if>
+              </where>))
+          </if>
+          <if test="obj6!=null and obj11!=null">
+              AND T1.id IN(SELECT employee_id FROM zh_site_record WHERE leaving IS NULL AND site_id IN(SELECT id FROM zh_site site join zh_construction con
+              on site.construction_id=con.id
+              <where>
+                  <if test="obj6!=null">
+                      and cons.id=#{obj6}
+                  </if>
+                  <if test="obj11!=null">
+                      and con.NAME  like '%${obj11}%'
+                  </if>
+                  <if test="obj12!=null">
+                      and site.address like '%${obj12}%'
+                  </if>
+                  <if test="obj13!=null">
+                      and  site.build like '%${obj13}%'
+                  </if>
+                  <if test="obj14!=null">
+                      and  site.site_category_id =#{obj14}
+                  </if>
+              </where>
+              ))
+          </if>
+      </where>
+      GROUP BY T1.id order by T1.blame desc, ar.date_time desc)
+
+      <if test="obj15==null">
+          <!-- 需要union已经离职的员工-->
+          <!-- obj2 siteId-->
+          <!-- obj3 companyId-->
+          <!-- obj6 constructionId-->
+          <!-- obj11 constructionName-->
+          <!-- obj12 address -->
+          <!-- obj13 build-->
+          <!-- obj14 category-->
+          <if test="obj2!=null or obj3!=null or obj6==null or obj11==null or obj12!=null or obj13!=null or obj14!=null ">
+              union (
+              select DISTINCT T3.*,1 as leaving from zh_employee T3
+              <!-- join zh_site_record 表 开始-->
+              join
+              <if test="obj2!=null">
+                  (select * from zh_site_record where leaving is not null
+                  <if test="obj5!=null or obj4!=null or obj10!=null">
+                      and employee_id in (select id from zh_employee
+                      <where>
+                          <if test="obj5!=null">
+                              and name like '%${obj5}%'
+                          </if>
+                          <if test="obj4!=null">
+                              and type= #{obj4}
+                          </if>
+                          <if test="obj10!=null">
+                              and identity like '%${obj10}%'
+                          </if>
+                      </where>)
+                  </if>
+                  and employee_id not in (select employee_id from zh_site_record where site_id=#{obj2} and leaving is null)
+                  )
+              </if>
+              <if test="obj2==null">
+                  (select * from zh_site_record
+                  <!-- 其他条件-->
+                  where leaving is not null
+                  <if test="obj5!=null or obj4!=null or obj10!=null">
+                      and employee_id in (select id from zh_employee
+                      <where>
+                          <if test="obj5!=null">
+                              and name like '%${obj5}%'
+                          </if>
+                          <if test="obj4!=null">
+                              and type= #{obj4}
+                          </if>
+                          <if test="obj10!=null">
+                              and identity like '%${obj10}%'
+                          </if>
+                      </where>)
+                  </if>
+                  <if test="obj6==null and obj11==null">
+                      and employee_id not in (select employee_id from zh_site_record
+                      where leaving is null
+                      <if test="obj2==null">AND site_id=#{obj2}
+                      </if>)
+                      <!--and site_id IN(SELECT id FROM zh_site-->
+                      <!--<where>-->
+                      <!--<if test="obj17!=null">-->
+                      <!--state =#{obj17}-->
+                      <!--</if>-->
+                      <!--<if test="obj6!=null">-->
+                      <!--AND construction_id=#{obj6}-->
+                      <!--</if>-->
+                      <!--<if test="obj16!=null">-->
+                      <!--and area_id in (${obj16})-->
+                      <!--</if>-->
+                      <!--<if test="obj12!=null">-->
+                      <!--and address like '%${obj12}%'-->
+                      <!--</if>-->
+                      <!--<if test="obj13!=null">-->
+                      <!--and  build like '%${obj13}%'-->
+                      <!--</if>-->
+                      <!--<if test="obj14!=null">-->
+                      <!--and  site_category_id =#{obj14}-->
+                      <!--</if>-->
+                      <!--</where>)-->
+                  </if>
+
+                  <!--<if test="obj6!=null and obj11==null">-->
+                  <!--and site_id IN(SELECT id FROM zh_site-->
+                  <!--<where>-->
+                  <!--<if test="obj17!=null">-->
+                  <!--state =#{obj17}-->
+                  <!--</if>-->
+                  <!--<if test="obj6!=null">-->
+                  <!--AND construction_id=#{obj6}-->
+                  <!--</if>-->
+                  <!--<if test="obj16!=null">-->
+                  <!--and area_id in (${obj16})-->
+                  <!--</if>-->
+                  <!--<if test="obj12!=null">-->
+                  <!--and address like '%${obj12}%'-->
+                  <!--</if>-->
+                  <!--<if test="obj13!=null">-->
+                  <!--and  build like '%${obj13}%'-->
+                  <!--</if>-->
+                  <!--<if test="obj14!=null">-->
+                  <!--and  site_category_id =#{obj14}-->
+                  <!--</if>-->
+                  <!--</where>)-->
+                  <!--</if>-->
+
+
+                  <if test="obj6==null and obj11!=null">
+                      and site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+                      on site.construction_id=cc.id
+                      <where>
+                          <if test="obj11!=null">
+                              and cc.NAME  like '%${obj11}%'
+                          </if>
+                          <if test="obj16!=null">
+                              and site.area_id in (${obj16})
+                          </if>
+                          <if test="obj12!=null">
+                              and site.address like '%${obj12}%'
+                          </if>
+                          <if test="obj13!=null">
+                              and  site.build like '%${obj13}%'
+                          </if>
+                          <if test="obj14!=null">
+                              and  site.site_category_id =#{obj14}
+                          </if>
+                      </where>)
+                  </if>
+
+
+                  <if test="obj6!=null and obj11!=null">
+                      and site_id IN(SELECT site.id FROM zh_site site join zh_construction cc
+                      on site.construction_id=cc.id
+                      <where>
+                          <if test="obj6!=null">
+                              and cc.id=#{obj6}
+                          </if>
+                          <if test="obj16!=null">
+                              and site.area_id in (${obj16})
+                          </if>
+                          <if test="obj11!=null">
+                              and cc.NAME  like '%${obj11}%'
+                          </if>
+                          <if test="obj11!=null">
+                              and site.address like '%${obj12}%'
+                          </if>
+                          <if test="obj13!=null">
+                              and  site.build like '%${obj13}%'
+                          </if>
+                          <if test="obj14!=null">
+                              and  site.site_category_id =#{obj14}
+                          </if>
+                      </where>)
+                  </if>
+
+                  <!--and employee_id  not in (-->
+                  <!--select employee_id from zh_site_record where leaving is NULL-->
+                  <!--<if test="obj6==null and obj11==null">-->
+                  <!--and site_id IN(SELECT id FROM zh_site-->
+                  <!--<where>-->
+                  <!--<if test="obj17!=null">-->
+                  <!--state =#{obj17}-->
+                  <!--</if>-->
+                  <!--<if test="obj6!=null">-->
+                  <!--AND construction_id=#{obj6}-->
+                  <!--</if>-->
+                  <!--<if test="obj16!=null">-->
+                  <!--and area_id in (${obj16})-->
+                  <!--</if>-->
+                  <!--<if test="obj12!=null">-->
+                  <!--and address like '%${obj12}%'-->
+                  <!--</if>-->
+                  <!--<if test="obj13!=null">-->
+                  <!--and  build like '%${obj13}%'-->
+                  <!--</if>-->
+                  <!--<if test="obj14!=null">-->
+                  <!--and  site_category_id =#{obj14}-->
+                  <!--</if>-->
+                  <!--</where>)-->
+                  <!--</if>-->
+                  <if test="obj6==null and obj11!=null">
+                      and site_id IN(SELECT site.id FROM zh_site site join zh_construction ccc
+                      on site.construction_id=ccc.id
+                      <where>
+                          <if test="obj11!=null">
+                              and ccc.NAME  like '%${obj11}%'
+                          </if>
+                          <if test="obj16!=null">
+                              and site.area_id in (${obj16})
+                          </if>
+                          <if test="obj12!=null">
+                              and site.address like '%${obj12}%'
+                          </if>
+                          <if test="obj13!=null">
+                              and  site.build like '%${obj13}%'
+                          </if>
+                          <if test="obj14!=null">
+                              and  site.site_category_id =#{obj14}
+                          </if>
+                      </where>)
+                  </if>
+                  <if test="obj6!=null and obj11!=null">
+                      and site_id IN(SELECT site.id FROM zh_site site join zh_construction ccc
+                      on site.construction_id=ccc.id
+                      <where>
+                          <if test="obj6!=null">
+                              and ccc.id=#{obj6}
+                          </if>
+                          <if test="obj16!=null">
+                              and site.area_id in (${obj16})
+                          </if>
+                          <if test="obj11!=null">
+                              and ccc.NAME  like '%${obj11}%'
+                          </if>
+                          <if test="obj11!=null">
+                              and site.address like '%${obj12}%'
+                          </if>
+                          <if test="obj13!=null">
+                              and  site.build like '%${obj13}%'
+                          </if>
+                          <if test="obj14!=null">
+                              and  site.site_category_id =#{obj14}
+                          </if>
+                      </where>
+                  </if>
+
+                  )
+              </if> T4
+              on T3.id=T4.employee_id
+              <if test="obj17!=null">
+                  WHERE
+                  T3.site_id IN (
+                  SELECT
+                  id
+                  FROM
+                  zh_site
+                  WHERE
+                  state = #{obj17}
+                  <if test="obj6!=null">
+                      AND construction_id = #{obj6}
+                  </if>
+                  )
+              </if>
+              )
+          </if>
+      </if>
+
+    ) total
+
+  </select>
+
+  <select id="getIdentitys"  resultType="java.lang.String">
+    SELECT identity from zh_employee
+  </select>
+  <select id="findEmployeePager" parameterType="com.weijin.building.request.PropSet" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        AND (name LIKE '%${obj1}%' OR phone LIKE '%${obj1}%' OR identity LIKE '%${obj1}%')
+      </if>
+      <if test="obj4!=null">
+        AND site_id=#{obj4}
+      </if>
+    </where>
+    <if test="obj5==null">
+      order by time asc
+    </if>
+    <if test="obj5==1">
+      order by compare desc
+    </if>
+
+    <if test="obj2!=null and obj3!=null">
+      LIMIT #{obj2},#{obj3}
+    </if>
+
+  </select>
+  <select id="findEmployeePagerCount" parameterType="com.weijin.building.request.PropSet" resultType="int">
+    SELECT
+    count(*)
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        AND (name LIKE '%${obj1}%' OR phone LIKE '%${obj1}%' OR identity LIKE '%${obj1}%')
+      </if>
+      <if test="obj2!=null">
+        AND site_id=#{obj2}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectSinglePrimaryKey" resultMap="singleResultMap"
+          parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectUploadByPrimaryKey" resultMap="uploadResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findByEmployee" parameterType="com.weijin.building.request.PropSet" resultType="int">
+    SELECT
+    count(*)
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        AND site_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        AND name=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        AND identity=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        AND bank_card=#{obj4}
+      </if>
+    </where>
+  </select>
+  <select id="findEmployee1" parameterType="com.weijin.building.request.PropSet" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        AND site_id=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        AND name=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        AND identity=#{obj3}
+      </if>
+      <if test="obj4!=null">
+        AND bank_card=#{obj4}
+      </if>
+    </where>
+  </select>
+
+  <select id="searchEmployee" parameterType="com.weijin.building.request.PropSet" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        AND identity=#{obj1}
+      </if>
+      <if test="obj2!=null">
+        AND phone=#{obj2}
+      </if>
+
+    </where>
+  </select>
+
+  <!--更新员工工地-->
+  <update id="updateSite" parameterType="com.weijin.building.request.PropSet" >
+    update zh_employee
+    <set >
+      <if test="obj2 != null" >
+        site_id = #{obj2,jdbcType=INTEGER}
+      </if>
+    </set >
+    where id = #{obj1,jdbcType=INTEGER}
+  </update>
+
+
+  <!--更新员工工地-->
+  <update id="removeAll" parameterType="java.lang.Integer" >
+    update zh_employee
+    <set >
+      site_id = NULL
+    </set >
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </update>
+
+
+
+  <select id="getIdentityInfo" parameterType="java.lang.Integer" resultMap="identityResultMap">
+    SELECT
+    *
+    FROM zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <!-- 根据分组选人-->
+  <select id="getByGroupId" parameterType="com.weijin.building.request.GroupRequest" resultMap="singleResultMap">
+    SELECT
+    *
+    FROM zh_employee
+    where group_id = #{groupId,jdbcType=INTEGER}
+    <if test="start!=null and end!=null">
+      LIMIT #{start},#{end}
+    </if>
+  </select>
+
+  <!-- 根据分组选人总数-->
+  <select id="getByGroupIdCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM zh_employee
+     where group_id = #{groupId,jdbcType=INTEGER}
+  </select>
+
+
+  <!-- 查找工地内没有分组的人-->
+  <select id="getByNoGroup" parameterType="com.weijin.building.request.GroupRequest" resultMap="singleResultMap">
+    SELECT
+    *
+    FROM zh_employee
+    where group_id is null and site_id = #{siteId,jdbcType=INTEGER}
+    <if test="name!=null">
+      and name like '%${name}%'
+    </if>
+    <if test="type!=null">
+      and type=#{type}
+    </if>
+    <if test="start!=null and end!=null">
+      LIMIT #{start},#{end}
+    </if>
+  </select>
+
+
+  <!-- 查找工地内没有分组的人总数-->
+  <select id="getByNoGroupCount" parameterType="com.weijin.building.request.GroupRequest" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM zh_employee
+    where group_id is null and site_id = #{siteId,jdbcType=INTEGER}
+    <if test="name!=null">
+      and name like '%${name}%'
+    </if>
+    <if test="type!=null">
+      and type=#{type}
+    </if>
+    <if test="start!=null and end!=null">
+      LIMIT #{start},#{end}
+    </if>
+  </select>
+
+  <!-- 移除工人分组-->
+  <update id="removeGroup" parameterType="java.lang.Integer" >
+    update zh_employee
+    set group_id= null
+    where id = #{employeeId,jdbcType=INTEGER}
+  </update>
+
+
+ <!--获取用于脸部对比的工人数据-->
+  <select id="getEmployeeFaceCompare" parameterType="java.lang.Integer" resultMap="identityResultMap">
+     SELECT
+    id,identity,name
+    FROM zh_employee
+    where site_id=#{obj1}
+  </select>
+
+  <!-- 获取工地人员的脸部信息-->
+  <select id="getFace" resultMap="faceResultMap" parameterType="java.lang.Integer" >
+    select
+    id,name,face,feature,identity
+    from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 获取工地人员的脸部信息-->
+  <select id="getFaceSingle" resultMap="identityResultMap" parameterType="java.lang.Integer" >
+    select
+     id,identity,name
+    from zh_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 更新工地人员的脸部信息-->
+  <update id="updateFaceFeature"  parameterType="com.weijin.building.request.PropSet" >
+   update zh_employee
+   set face=#{obj2},
+    feature=#{obj3}
+    where id = #{obj1}
+  </update>
+
+
+  <!-- 根据认证比对查找工人-->
+  <select id="getComparePager" parameterType="com.weijin.building.request.PropSet" resultMap="compareResultMap">
+    SELECT
+    id,name,identity,compare
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        and name like '%${obj1}%'
+      </if>
+      <if test="obj2!=null">
+        and site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and compare=#{obj3}
+      </if>
+    </where>
+    ORDER by compare desc
+    <if test="start!=null and end!=null">
+      LIMIT #{start},#{end}
+    </if>
+  </select>
+  <!-- 根据认证比对查找工人总数-->
+  <select id="getComparePagerCount" parameterType="com.weijin.building.request.PropSet" resultType="java.lang.Integer">
+    SELECT
+   count(id)
+    FROM zh_employee
+    <where>
+      <if test="obj1!=null">
+        and name like '%${obj1}%'
+      </if>
+      <if test="obj2!=null">
+        and site_id=#{obj2}
+      </if>
+      <if test="obj3!=null">
+        and compare=#{obj3}
+      </if>
+    </where>
+  </select>
+
+
+  <!--更新工人认证比对信息-->
+  <update id="updateCompare" parameterType="com.weijin.building.request.PropSet" >
+    update zh_employee
+    set compare =#{obj2}
+    where IDENTITY =#{obj1}
+  </update>
+</mapper>
