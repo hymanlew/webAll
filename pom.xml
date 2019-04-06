@@ -294,10 +294,7 @@
             <artifactId>druid</artifactId>
             <version>1.0.16</version>
         </dependency>
-
-
     </dependencies>
-
 
     <build>
         <finalName>web1</finalName>
@@ -347,6 +344,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-
 </project>
