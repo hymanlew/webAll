@@ -149,6 +149,15 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 	</tx:advice>
 
 	<!--
+		AOP 是面向切面的编程，其关注点就是对程序的横切性的问题。可以把它看作是 OO 的补充，OO 是面向对象的针对的是对象，而 AOP 是针对
+		的程序流程，当到达某一个特定的程序服务流程时自动切入进行相关操作。
+
+		Aspect： 是对横切性关注点的模块化，即指定一个模块（类）声明为切面模块。
+		Advice： 是对横切性关注点的具体实现，即模块中（类中）的具体实现方法。包含有 Before，After，Around 等等 Advice。
+		Pointcut：是切入点，指定了哪些程序操作需要进行切面拦截操作。
+		JoinPoint：是被 AOP 切入拦截的具体实现方法。
+		Weave：   是将 Advice 应用到 TargetObject 目标对象上的过程，称为织入。并且 spring 支持的是动态织入。
+
 		<tx:advice>：id用于指定此通知的名字， transaction-manager用于指定事务管理器，默认的事务管理器名字为“transactionManager”；
 		<tx:method>：用于定义事务属性即相关联的方法名；
 
@@ -162,7 +171,8 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 
          timeout：事务超时时间设置，单位为秒，默认-1，表示事务超时将依赖于底层事务系统；
 
-         read-only：事务只读设置，默认为false，表示不是只读；
+         read-only：事务只读设置（即不能修改数据库数据只能读取），默认为false；只读事务使得 session 就不会对数据进行增删改的检查了，
+         			就只是对数据的读取，所以此设置能提高程序的运行性能。
 
          rollback-for：需要触发回滚的异常定义，以“，”分割，默认任何RuntimeException 将导致事务回滚，而任何Checked Exception 将不导
          			致事务回滚；异常名字定义和TransactionProxyFactoryBean中含义一样
@@ -210,7 +220,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 		<aop:config>：AOP相关配置：
 		<aop:pointcut/>：切入点定义，定义名为"serviceMethod"的aspectj切入点，切入点表达式为"execution(* cn..chapter9.service..*.*(..))"
 					表示拦截cn包及子包下的chapter9. service包及子包下的任何类的任何方法；
-		<aop:advisor>：Advisor定义，其中切入点为serviceMethod，通知为txAdvice。
+		<aop:advisor>：Advisor定义（即可以当作是 aspect 注解的 aop 类），其中包含了切入点 Pointcut，及具体实现 Advice。
 	-->
 	<aop:config>
 		<aop:pointcut id="transactionPointcut" expression="execution(* com.hyman.service..*.*(..))" />
