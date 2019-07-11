@@ -3,7 +3,6 @@ package com.hyman.task;
 import com.hyman.dao.TestDao;
 import com.hyman.dbmanager.DataSourceContextHolder;
 import com.hyman.service.DemoService;
-import com.hyman.util.DateUtil;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
