@@ -104,7 +104,8 @@
         <package name="com.hyman.entity" />
     </typeAliases>
 
-    <!--SQL映射文件,mybatis的核心，但如果使用的 generator自动生成则就不需要在此配置 -->
+    <!-- SQL映射文件,mybatis的核心，但如果使用的 generator自动生成则就不需要在此配置 -->
+    <!-- 值是 sql 语句映射配置文件的完整路径，必须是精准的某个文件，而不能使用 * 代替 -->
     <!--<mappers>-->
         <!--<mapper resource="mapping/*.xml" />-->
     <!--</mappers>-->
