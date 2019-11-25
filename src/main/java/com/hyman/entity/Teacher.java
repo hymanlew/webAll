@@ -1,6 +1,7 @@
 package com.hyman.entity;
 
 public class Teacher {
+
     private String name;
     private String password;
 

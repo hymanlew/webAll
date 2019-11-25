@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!--  namespace 值是 userDao 接口的完整类名  -->
+<mapper namespace="spring.dao.IUserDao">
+
+	<!--	parameterType	用于声明方法参数的类型; 
+				useGeneratedKeys	和		keyProperty用于设置自动返回自增ID的值；
+				#{username}	表达式用于读取返回结果参数的 Bean 属性名绑定到 SQL 语句上。
+				Mapper	映射		  -->
+
+
+  <!--  ID 值是接口内的方法名，
+  			parameterType 是参数的类型的完整类名，当方法内只有一个参数的时候使用，
+  						如果有多个参数时就要使用 @param 注解标注。  -->
+  						
+     <!--  读取到添加的自动生成的ID  -->
+  <insert id="insertUser" parameterType="spring.entity.User"
+  		useGeneratedKeys="true" keyProperty="id">
+    insert into user (
+    		id,
+    		name,
+    		password,
+    		salary
+    	) values (
+    		null,
+    		#{username},
+    		#{password},
+    		#{salary}
+    		)
+  </insert>
+  
+  <!--  ID 值是接口内的方法名，
+  			resultType 是用于声明方法的返回结果元素的类型的完整类名，
+  									  用于声明返回值类型，其类型与返回的 List中元素类型一致。  -->
+  			
+  <!--  MyBatis 会自动将查询结果中列名 与 user Bean中的属性对应赋值。
+  				如果表的列名 与 user bean属性的列名不一致，则需要使用列的别名方式
+  				修改查询结果的列名，使其与 user bean中的属性相一致  -->
+  				
+  <select id="findAllUser" resultType="spring.entity.User">
+  	select
+  				id,name as username,password,salary
+  	from
+  				user
+  </select>
+
+<!-- 	parameterType 用于声明方法参数的类型，是参数的类型的完整类名，当方法内只有一个参数的时候使用。
+	但如果是 select sql语句，当有且只有一个参数时，就可以不写参数类型（仅限于 select语句）。
+
+  	如果有一个以上即多个参数时，在 DAO 接口内的方法内就要使用 @param 注解标注，并且使用此注解后
+	在 mapper.xml中就不用再声明 parameterType了（自定义类型除外！）。  -->
+	
+	<update id="updateUser" parameterType="spring.entity.User">
+		update user
+			set
+			name=#{username},
+			password=#{password},
+			salary=#{salary}
+			where
+			id=#{id}
+	</update>
+
+	<select id="findUserById" resultType="spring.entity.User"
+		parameterType="int">
+		select
+				id,name as username,password,salary
+		from
+				user
+		where
+				id=#{id}
+	</select>
+	
+	<delete id="deleteUserById" parameterType="int">
+		delete
+		from
+				user
+		where
+				id=#{id}
+	</delete>
+	
+	<select id="findUserByParam" resultType="spring.entity.User">
+		select 
+				id,name as username,password,salary
+		from
+				user
+		where
+				name like #{name} and
+				salary>= #{salary}
+	</select>
+	
+	<!-- 	
+			其中，变量是作为 key值，用户数据是作为 value值。
+			name as username 当使用了别名时候，则别名做为map中的key。
+	 -->
+	<select id="findUserByMap" resultType="map">
+		select
+				id,name as username
+		from
+				user
+	</select>
+	
+	<!-- 	${}	用于拼接SQL，#{}	用于替换参数	 -->
+	<select id="findUsers" resultType="spring.entity.User">
+		select 
+				id,name as username,password
+		from
+				user
+		where
+				${where} #{param}
+	</select>
+	
+<!-- 	mapper 中的select sql 语句，只有且只有一个参数时，可以不写参数类型 -->
+	<!--  mapping/userMapper.xml 映射文件  -->
+
+	<select id="findAllUsers" resultType="spring.entity.User">
+		select
+				id,
+				name,
+				pwd as password,
+				email,
+				phone,
+				create_time as time
+		from
+				user
+		limit
+				#{start},#{size}
+	</select>
+
+	<select id="countUsers" resultType="int">
+		select
+				count(*)
+		from
+				user
+	</select>
+
+	<insert id="insertUser" parameterType="spring.entity.User">
+		insert into user
+		(id,name,pwd,email,phone,create_time)
+		values
+		(null,#{name},#{password},#{email},#{phone},now())
+	</insert>
+
+
+	<!--  ID 值是接口内的方法名， type 是方法内参数的类型的完整类名  -->
+	<!--  读取到添加的自动生成的ID  -->
+
+	<!--  ID 值是接口内的方法名， type 是返回的结果的类型的完整类名  -->
+	<!--  MyBatis 会自动将查询结果中列名 与 user Bean中的属性对应赋值。
+                    如果表的列名 与 user bean属性的列名不一致，则需要使用列的别名方式
+                    修改查询结果的列名，使其与 user bean中的属性相一致  -->
+
+</mapper>

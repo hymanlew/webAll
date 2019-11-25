@@ -1,11 +1,10 @@
-package spring.dao;
+package com.hyman.dao;
 
 import java.util.List;
 import java.util.Map;
 
+import com.hyman.entity.User;
 import org.apache.ibatis.annotations.Param;
-
-import spring.entity.User;
 
 //在 MyBatis 中的 UserDao 接口内的方法必须是唯一的，不允许重载
 public interface IUserDao {
@@ -66,8 +65,6 @@ public interface IUserDao {
 			@Param("size") int size);
 
 	int countUsers();
-
-	Integer insertUser(User user);
 }
 
 

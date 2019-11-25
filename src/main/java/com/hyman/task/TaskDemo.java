@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
@@ -56,7 +57,8 @@ public class TaskDemo {
     //@Scheduled(cron = "0/5 * * ? * *")
     public void test(){
 
-        String date = DateUtil.fmPattern(new Date(),"mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+        String date = formatter.format(new Date());
         System.out.println(date);
         System.out.println("--------------test task----------------");
     }

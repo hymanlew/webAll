@@ -9,6 +9,7 @@ http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<context:component-scan base-package="com.hyman.dao" />
 	<context:component-scan base-package="com.hyman">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
@@ -27,6 +28,15 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 
 	<!-- 只适用于 dbcp连接池，使用 #{name}来接收参数 -->
     <!--<util:properties id="jdbc" location="classpath:config/db.properties" />-->
+	<!--  配置 DBCP  -->
+	<!--<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource">-->
+		<!--<property name="driverClassName" value="#{db.driver}"></property>-->
+		<!--<property name="url" value="#{db.url}"></property>-->
+		<!--<property name="username" value="#{db.name}"></property>-->
+		<!--<property name="password" value="#{db.password}"></property>-->
+		<!--<property name="initialSize" value="#{db.init}"></property>-->
+		<!--<property name="maxActive" value="#{db.max}"></property>-->
+	<!--</bean>-->
 
 	<!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
 		<!--<property name="locations">-->
@@ -58,7 +68,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 
 		<property name="initialSize" value="${initialSize}" />
 		<property name="maxActive" value="${maxActive}" />
-		<property name="maxIdle" value="${maxIdle}" />
+		<property name="minIdle" value="${maxIdle}" />
 		<property name="maxWait" value="${maxWait}" />
 		<property name="validationQuery" value="${validationQuery}" />
 
@@ -85,6 +95,12 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 		<!-- .... -->
 	</bean>
 
+	<!--
+		在基础的 MyBatis 用法中，是通过 SqlSessionFactoryBuilder 来创建 SqlSessionFactory 的。 而在 MyBatis-Spring 中，则
+		使用 SqlSessionFactoryBean 来创建。
+		通常在 MyBatis-Spring 中，你不需要直接使用 SqlSessionFactoryBean 或对应的 SqlSessionFactory。相反，session 的工厂
+		 bean 将会被注入到 MapperFactoryBean 或其它继承于 SqlSessionDaoSupport 的 DAO（Data Access Object，数据访问对象）中。
+	-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
         <property name="configLocation" value="classpath:spring/mybatis-config.xml" />
 
@@ -92,21 +108,32 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 		<!-- 此时采用多数据源的方式进行 sqlsession 的定义，因为 sqlsession 是单例的，所以只能指定到切换数据源的 bean 中，否则不生效 -->
 		<property name="dataSource" ref="dynamicDataSource" />
 
-		<!-- 自动扫描entity目录, 省掉了 mybatis-config 中 Configuration里的手工配置 -->
+		<!-- 自动扫描 mapper 文件目录, 省掉了 mybatis-config 中 Configuration里的手工配置 -->
 		<property name="mapperLocations" value="classpath:mapping/*.xml" />
 	</bean>
 
-	<!-- myBatis 在 basedao中使用 -->
 	<!--
-		在使用Mybatis与Spring集成的时候我们用到了SqlSessionTemplate 这个类。
+		在 MyBatis 中，你可以使用 SqlSessionFactory 来创建 SqlSession。一旦你获得一个 session 之后，你可以使用它来执行映射
+		了的语句，提交或回滚连接，最后当不再需要它的时候，你可以关闭 session。使用 MyBatis-Spring 之后，你不再需要直接使用
+		SqlSessionFactory 了，因为你的 bean 可以被注入一个线程安全的 SqlSession（SqlSessionTemplate），它能基于 Spring 的
+		事务配置来自动提交、回滚、关闭 session。
 
 		通过源码我们何以看到 SqlSessionTemplate 实现了SqlSession接口，也就是说我们可以使用SqlSessionTemplate 来代理以往的
 		DefailtSqlSession完成对数据库的操作，但是DefailtSqlSession这个类不是线程安全的，所以这个类不可以被设置成单例模式的。
+		而 SqlSessionTemplate 是线程安全的，可以被多个 DAO 或映射器所共享使用。
 
-		如果是常规开发模式 我们每次在使用 DefailtSqlSession的时候都从 SqlSessionFactory当中获取一个就可以了。但是与Spring集成以后，
-		Spring提供了一个全局唯一的 SqlSessionTemplate示例来完成 DefailtSqlSession的功能，问题就是：无论是多个dao使用一个
-		SqlSessionTemplate，还是一个 dao使用一个 SqlSessionTemplate，SqlSessionTemplate都是对应一个sqlSession，当多个web线程调
-		用同一个dao时，它们使用的是同一个SqlSessionTemplate，也就是同一个SqlSession（即是线程安全的，用到了代理模式）。
+		如果是常规开发模式，每次在使用 DefailtSqlSession的时候都从 SqlSessionFactory当中获取一个就可以了。但是与Spring集成以
+		后，Spring提供了一个全局唯一的 SqlSessionTemplate示例来完成 DefailtSqlSession的功能，无论是多个dao使用一个
+		SqlSessionTemplate，还是一个 dao使用一个 SqlSessionTemplate，SqlSessionTemplate都是对应一个sqlSession，当多个web线
+		程调	用同一个dao时，它们使用的是同一个SqlSessionTemplate，也就是同一个SqlSession（即是线程安全的，用到了代理模式）。
+
+		当调用 SQL 方法时（包括由 getMapper() 方法返回的映射器中的方法），SqlSessionTemplate 将会保证使用的 SqlSession 与当
+		前 Spring 的事务相关。此外它管理 session 的生命周期，包含必要的关闭、提交或回滚操作。另外它也负责将 MyBatis 的异常翻
+		译成 Spring 中的 DataAccessExceptions。
+
+		由于 sqlSessionTemplate 可以参与到 Spring 的事务管理中，并且是线程安全的，可以供多个映射器类使用，你应该总是用
+		SqlSessionTemplate 来替换 MyBatis 默认的 DefaultSqlSession 实现。在同一应用程序中的不同类之间混杂使用可能会引起数据
+		一致性的问题。
 	-->
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<!-- 选择默认的构造器 -->
@@ -117,10 +144,10 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 	</bean>
 
 	<!-- 会自动扫描指定的项目下的 Dao 接口-->
-	<!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
-		<!--<property name="basePackage" value="mapping" />-->
-		<!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />-->
-	<!--</bean>-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.hyman.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<!--<property name="dataSource" ref="dataSource" />-->
@@ -243,4 +270,6 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springfr
 	<aop:config proxy-target-class="true">
 		<aop:advisor advice-ref="druidInterceptor" pointcut-ref="druidPointcut" />
 	</aop:config>
+
+	<!-- 参考官方文档：http://mybatis.org/spring/zh/index.html -->
 </beans>

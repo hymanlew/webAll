@@ -4,14 +4,27 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.hyman.dao.IUserDao;
+import com.hyman.dao.UserInfoMapper;
+import com.hyman.dao.UserMapper;
+import com.hyman.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("userService")  // 当前类是业务层组件
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImp implements UserService {
 
 	// 因为注解写到接口上没用，所以当前默认是 userDao
 	@Resource
-	private UserDao dao;
+	private IUserDao dao;
+
+	@Autowired
+	UserMapper userMapper;
+
+	@Autowired
+	UserInfoMapper userInfoMapper;
 	
 	public List<User> list(Integer page) {
 		
