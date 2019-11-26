@@ -60,17 +60,17 @@ public interface UserInfoMapper {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default DeleteDSL<MyBatis3DeleteModelAdapter<Integer>> deleteByExample() {
-        return DeleteDSL.deleteFromWithMapper(this::delete, new UserInfoDynamicSqlSupport.User2);
+        return DeleteDSL.deleteFromWithMapper(this::delete, UserInfoDynamicSqlSupport.duser2);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int insert(User2 record) {
-        return insert(SqlBuilder.insert(record)
-                .into(new UserInfoDynamicSqlSupport.User2())
-                .map(realname).toProperty("realName")
-                .map(gmtCreate).toProperty("gmtCreate")
-                .map(gmtModified).toProperty("gmtModified")
-                .map(hobby).toProperty("hobby")
+    default int insert(User2 user2) {
+        return insert(SqlBuilder.insert(user2)
+                .into(UserInfoDynamicSqlSupport.duser2)
+                .map(UserInfoDynamicSqlSupport.realName).toProperty("realName")
+                .map(UserInfoDynamicSqlSupport.gmtCreate).toProperty("gmtCreate")
+                .map(UserInfoDynamicSqlSupport.gmtModified).toProperty("gmtModified")
+                .map(UserInfoDynamicSqlSupport.hobby).toProperty("hobby")
                 .build()
                 .render(RenderingStrategy.MYBATIS3));
     }
@@ -78,42 +78,44 @@ public interface UserInfoMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default int insertSelective(User2 record) {
         return insert(SqlBuilder.insert(record)
-                .into(userInfo)
-                .map(realName).toPropertyWhenPresent("realName", record::getRealName)
-                .map(gmtCreate).toPropertyWhenPresent("gmtCreate", record::getGmtCreate)
-                .map(gmtModified).toPropertyWhenPresent("gmtModified", record::getGmtModified)
-                .map(hobby).toPropertyWhenPresent("hobby", record::getHobby)
+                .into(UserInfoDynamicSqlSupport.duser2)
+                .map(UserInfoDynamicSqlSupport.realName).toPropertyWhenPresent("realName", record::getRealName)
+                .map(UserInfoDynamicSqlSupport.gmtCreate).toPropertyWhenPresent("gmtCreate", record::getGmtCreate)
+                .map(UserInfoDynamicSqlSupport.gmtModified).toPropertyWhenPresent("gmtModified", record::getGmtModified)
+                .map(UserInfoDynamicSqlSupport.hobby).toPropertyWhenPresent("hobby", record::getHobby)
                 .build()
                 .render(RenderingStrategy.MYBATIS3));
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default QueryExpressionDSL<MyBatis3SelectModelAdapter<List<User2>>> selectByExample() {
-        return SelectDSL.selectWithMapper(this::selectMany, id, realName, gmtCreate, gmtModified, hobby)
-                .from(userInfo);
+        return SelectDSL.selectWithMapper(this::selectMany, UserInfoDynamicSqlSupport.id, UserInfoDynamicSqlSupport.realName,
+                UserInfoDynamicSqlSupport.gmtCreate, UserInfoDynamicSqlSupport.gmtModified, UserInfoDynamicSqlSupport.hobby)
+                .from(UserInfoDynamicSqlSupport.duser2);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default QueryExpressionDSL<MyBatis3SelectModelAdapter<List<User2>>> selectDistinctByExample() {
-        return SelectDSL.selectDistinctWithMapper(this::selectMany, id, realName, gmtCreate, gmtModified, hobby)
-                .from(userInfo);
+        return SelectDSL.selectDistinctWithMapper(this::selectMany, UserInfoDynamicSqlSupport.id, UserInfoDynamicSqlSupport.realName,
+                UserInfoDynamicSqlSupport.gmtCreate, UserInfoDynamicSqlSupport.gmtModified, UserInfoDynamicSqlSupport.hobby)
+                .from(UserInfoDynamicSqlSupport.duser2);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default UpdateDSL<MyBatis3UpdateModelAdapter<Integer>> updateByExample(User2 record) {
-        return UpdateDSL.updateWithMapper(this::update, userInfo)
-                .set(realName).equalTo(record::getRealName)
-                .set(gmtCreate).equalTo(record::getGmtCreate)
-                .set(gmtModified).equalTo(record::getGmtModified)
-                .set(hobby).equalTo(record::getHobby);
+        return UpdateDSL.updateWithMapper(this::update, UserInfoDynamicSqlSupport.duser2)
+                .set(UserInfoDynamicSqlSupport.realName).equalTo(record::getRealName)
+                .set(UserInfoDynamicSqlSupport.gmtCreate).equalTo(record::getGmtCreate)
+                .set(UserInfoDynamicSqlSupport.gmtModified).equalTo(record::getGmtModified)
+                .set(UserInfoDynamicSqlSupport.hobby).equalTo(record::getHobby);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default UpdateDSL<MyBatis3UpdateModelAdapter<Integer>> updateByExampleSelective(User2 record) {
-        return UpdateDSL.updateWithMapper(this::update, userInfo)
-                .set(realName).equalToWhenPresent(record::getRealName)
-                .set(gmtCreate).equalToWhenPresent(record::getGmtCreate)
-                .set(gmtModified).equalToWhenPresent(record::getGmtModified)
-                .set(hobby).equalToWhenPresent(record::getHobby);
+        return UpdateDSL.updateWithMapper(this::update, UserInfoDynamicSqlSupport.duser2)
+                .set(UserInfoDynamicSqlSupport.realName).equalToWhenPresent(record::getRealName)
+                .set(UserInfoDynamicSqlSupport.gmtCreate).equalToWhenPresent(record::getGmtCreate)
+                .set(UserInfoDynamicSqlSupport.gmtModified).equalToWhenPresent(record::getGmtModified)
+                .set(UserInfoDynamicSqlSupport.hobby).equalToWhenPresent(record::getHobby);
     }
 }

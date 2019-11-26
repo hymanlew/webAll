@@ -1,11 +1,7 @@
 package test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.hyman.dao.IUserDao;
+import com.hyman.entity.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,8 +9,11 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import spring.dao.IUserDao;
-import spring.entity.User;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DemoTest1 {
 
@@ -44,9 +43,8 @@ public class DemoTest1 {
 		System.out.println(dao.getClass());
 		
 		User user = new User();
-		user.setUsername("lami");
+		user.setName("lami");
 		user.setPassword("123");
-		user.setSalary(6000);
 		Integer n = dao.insertUser(user);
 		System.out.println(n);
 		session.commit();
@@ -69,9 +67,8 @@ public class DemoTest1 {
 		
 		// session.insert(配置文件中的SQL ID,参数对象)
 		User user = new User();
-		user.setUsername("mili");
+		user.setName("mili");
 		user.setPassword("123");
-		user.setSalary(6000);
 		System.out.println(user); // 返回自动生成的ID
 		Integer n = session.insert("insertUser", user);
 		System.out.println(user); // 返回自动生成的ID
@@ -105,7 +102,7 @@ public class DemoTest1 {
 		IUserDao dao = session.getMapper(IUserDao.class);
 		User user = dao.findUserById(1);
 		System.out.println(user);
-		user.setUsername("fanfan");
+		user.setName("fanfan");
 		int n = dao.updateUser(user);
 		System.out.println(n);
 		session.commit();

@@ -22,7 +22,8 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Spring 框架 -->
@@ -210,6 +211,7 @@
             <version>3.5.0</version>
         </dependency>
         <!-- mybatis 新特性 http://www.mybatis.org/mybatis-dynamic-sql/docs/quickStart.html-->
+        <!-- mybatis 新特性 http://www.mybatis.org/mybatis-dynamic-sql/docs/conditions.html-->
         <dependency>
             <groupId>org.mybatis.dynamic-sql</groupId>
             <artifactId>mybatis-dynamic-sql</artifactId>

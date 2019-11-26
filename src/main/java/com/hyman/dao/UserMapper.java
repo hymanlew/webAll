@@ -28,6 +28,7 @@ import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -63,23 +64,20 @@ public interface UserMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default QueryExpressionDSL<MyBatis3SelectModelAdapter<Long>> countByExample() {
         return SelectDSL.selectWithMapper(this::count, SqlBuilder.count())
-                .from(user);
+                .from(UserDynamicSqlSupport.duser);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default DeleteDSL<MyBatis3DeleteModelAdapter<Integer>> deleteByExample() {
-        return DeleteDSL.deleteFromWithMapper(this::delete, user);
+        return DeleteDSL.deleteFromWithMapper(this::delete, UserDynamicSqlSupport.duser);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default int insert(User record) {
         return insert(SqlBuilder.insert(record)
-                .into(user)
-                .map(username).toProperty("username")
-                .map(password).toProperty("password")
-                .map(userInfoId).toProperty("userInfoId")
-                .map(gmtCreate).toProperty("gmtCreate")
-                .map(gmtModified).toProperty("gmtModified")
+                .into(UserDynamicSqlSupport.duser)
+                .map(UserDynamicSqlSupport.username).toProperty("name")
+                .map(UserDynamicSqlSupport.password).toProperty("password")
                 .build()
                 .render(RenderingStrategy.MYBATIS3));
     }
@@ -87,45 +85,41 @@ public interface UserMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default int insertSelective(User record) {
         return insert(SqlBuilder.insert(record)
-                .into(user)
-                .map(username).toPropertyWhenPresent("username", record::getUsername)
-                .map(password).toPropertyWhenPresent("password", record::getPassword)
-                .map(userInfoId).toPropertyWhenPresent("userInfoId", record::getUserInfoId)
-                .map(gmtCreate).toPropertyWhenPresent("gmtCreate", record::getGmtCreate)
-                .map(gmtModified).toPropertyWhenPresent("gmtModified", record::getGmtModified)
+                .into(UserDynamicSqlSupport.duser)
+                .map(UserDynamicSqlSupport.username).toPropertyWhenPresent("name", record::getName)
+                .map(UserDynamicSqlSupport.password).toPropertyWhenPresent("password", record::getPassword)
                 .build()
                 .render(RenderingStrategy.MYBATIS3));
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default QueryExpressionDSL<MyBatis3SelectModelAdapter<List<User>>> selectByExample() {
-        return SelectDSL.selectWithMapper(this::selectMany, id, username, password, userInfoId, gmtCreate, gmtModified)
-                .from(user);
+        return SelectDSL.selectWithMapper(this::selectMany, UserDynamicSqlSupport.id, UserDynamicSqlSupport.username,
+                UserDynamicSqlSupport.password)
+                .from(UserDynamicSqlSupport.duser);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default QueryExpressionDSL<MyBatis3SelectModelAdapter<List<User>>> selectDistinctByExample() {
-        return SelectDSL.selectDistinctWithMapper(this::selectMany, id, username, password, userInfoId, gmtCreate, gmtModified)
-                .from(user);
+        return SelectDSL.selectDistinctWithMapper(this::selectMany, UserDynamicSqlSupport.id, UserDynamicSqlSupport.username,
+                UserDynamicSqlSupport.password)
+                .from(UserDynamicSqlSupport.duser);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default UpdateDSL<MyBatis3UpdateModelAdapter<Integer>> updateByExample(User record) {
-        return UpdateDSL.updateWithMapper(this::update, user)
-                .set(username).equalTo(record::getUsername)
-                .set(password).equalTo(record::getPassword)
-                .set(userInfoId).equalTo(record::getUserInfoId)
-                .set(gmtCreate).equalTo(record::getGmtCreate)
-                .set(gmtModified).equalTo(record::getGmtModified);
+        return UpdateDSL.updateWithMapper(this::update, UserDynamicSqlSupport.duser)
+                .set(UserDynamicSqlSupport.username).equalTo(record::getName)
+                .set(UserDynamicSqlSupport.password).equalTo(record::getPassword);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default UpdateDSL<MyBatis3UpdateModelAdapter<Integer>> updateByExampleSelective(User record) {
-        return UpdateDSL.updateWithMapper(this::update, user)
-                .set(username).equalToWhenPresent(record::getUsername)
-                .set(password).equalToWhenPresent(record::getPassword)
-                .set(userInfoId).equalToWhenPresent(record::getUserInfoId)
-                .set(gmtCreate).equalToWhenPresent(record::getGmtCreate)
-                .set(gmtModified).equalToWhenPresent(record::getGmtModified);
+        return UpdateDSL.updateWithMapper(this::update, UserDynamicSqlSupport.duser)
+                .set(UserDynamicSqlSupport.username).equalToWhenPresent(record::getName)
+                .set(UserDynamicSqlSupport.password).equalToWhenPresent(record::getPassword);
     }
+
+    @SelectProvider(type=SqlProviderAdapter.class, method="select")
+    List<Map<String,Object>> selectManyCustom(SelectStatementProvider selectStatement);
 }

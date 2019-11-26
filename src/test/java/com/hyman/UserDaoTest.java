@@ -1,19 +1,18 @@
 package test;
 
-import java.util.List;
-
+import com.hyman.dao.IUserDao;
+import com.hyman.entity.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import spring.dao.UserDao;
-import spring.entity.User;
+import java.util.List;
 
 public class UserDaoTest {
 
 	ClassPathXmlApplicationContext ctx;
-	UserDao dao;
+	IUserDao dao;
 	
 	// 在所有的案例都执行之前，执行 @Before 注解的方法。
 	@Before
@@ -21,7 +20,7 @@ public class UserDaoTest {
 		
 		ctx = new ClassPathXmlApplicationContext("config/spring-db.xml",
 				"config/spring-mybatis.xml");
-		dao = ctx.getBean("userDao",UserDao.class);
+		dao = ctx.getBean("userDao",IUserDao.class);
 		
 	}
 	

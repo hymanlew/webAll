@@ -1,14 +1,13 @@
 package test;
 
-import java.util.List;
-
+import com.hyman.dao.IUserDao;
+import com.hyman.entity.User;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import spring.dao.IUserDao;
-import spring.entity.User;
+import java.util.List;
 
 public class Test_spring {
 

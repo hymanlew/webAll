@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 public final class UserInfoDynamicSqlSupport {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final User2 userInfo = new User2();
+    public static final User2 duser2 = new User2();
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Long> id = userInfo.id;
+    public static final SqlColumn<Long> id = duser2.id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<String> realName = userInfo.realName;
+    public static final SqlColumn<String> realName = duser2.realName;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<LocalDateTime> gmtCreate = userInfo.gmtCreate;
+    public static final SqlColumn<LocalDateTime> gmtCreate = duser2.gmtCreate;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<LocalDateTime> gmtModified = userInfo.gmtModified;
+    public static final SqlColumn<LocalDateTime> gmtModified = duser2.gmtModified;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<String> hobby = userInfo.hobby;
+    public static final SqlColumn<String> hobby = duser2.hobby;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final class User2 extends SqlTable {
@@ -42,7 +42,7 @@ public final class UserInfoDynamicSqlSupport {
         public final SqlColumn<String> hobby = column("hobby", JDBCType.LONGVARCHAR);
 
         public User2() {
-            super("user_info");
+            super("duser");
         }
     }
 }

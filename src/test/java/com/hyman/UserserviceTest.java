@@ -1,14 +1,13 @@
 package test;
 
-import java.util.List;
-
+import com.hyman.entity.User;
+import com.hyman.service.UserService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import spring.entity.User;
-import spring.service.UserService;
+import java.util.List;
 
 public class UserserviceTest {
 
@@ -48,12 +47,9 @@ public class UserserviceTest {
 	
 	@Test
 	public void testinsert() {
-		
 		User user = new User();
 		user.setName("wulu");
-		user.setpassword("333");
-		user.setEmail("wulu@qq.com");
-		user.setPhone("131313131");
+		user.setPassword("333");
 		int n = service.save(user);
 		System.out.println(n);
 	}
