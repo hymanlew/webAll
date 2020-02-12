@@ -1,4 +1,4 @@
-package test;
+package com.hyman;
 
 import com.hyman.dao.IUserDao;
 import com.hyman.entity.User;

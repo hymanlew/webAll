@@ -1,4 +1,4 @@
-package test;
+package com.hyman;
 
 import com.hyman.entity.User;
 import com.hyman.service.UserService;

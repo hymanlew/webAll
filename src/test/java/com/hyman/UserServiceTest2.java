@@ -1,9 +1,8 @@
-package com.youlu.samples.spring.mybatis.service;
+package com.hyman;
 
 import com.hyman.entity.User;
 import com.hyman.entity.User2;
 import com.hyman.service.UserService;
-import com.hyman.util.UserInfo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -20,7 +19,7 @@ public class UserServiceTest2 extends AbstractTransactionalTestNGSpringContextTe
 
     @Test
     @Rollback(false)
-    public void testRegister(){
+    public void testRegister() {
         User2 userInfo = new User2();
         userInfo.setHobby("编程");
         userInfo.setRealName("任帅鹏");

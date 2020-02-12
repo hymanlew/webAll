@@ -1,4 +1,4 @@
-package test;
+package com.hyman;
 
 import java.io.InputStream;
 
