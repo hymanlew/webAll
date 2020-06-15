@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>4.2.17.RELEASE</version>
         </dependency>
         <!-- 包括过滤器和网站安全相关的基础代码。如果你需要Spring Security网页验证服务和基于URL的访问控制你需要这个模块。-->
         <dependency>
