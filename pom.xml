@@ -208,7 +208,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.5.0</version>
+            <version>3.5.6</version>
         </dependency>
         <!-- mybatis 新特性 http://www.mybatis.org/mybatis-dynamic-sql/docs/quickStart.html-->
         <!-- mybatis 新特性 http://www.mybatis.org/mybatis-dynamic-sql/docs/conditions.html-->
