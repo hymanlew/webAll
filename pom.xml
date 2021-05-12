@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>4.2.1.RELEASE</version>
+            <version>5.2.10.RELEASE</version>
         </dependency>
         <!-- 包含安全命令空间的解析代码。如果你使用Spring Security XML命令空间进行配置你需要包含这个模块。 -->
         <dependency>
